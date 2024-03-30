@@ -11,6 +11,7 @@ const app = express();
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(bodyParser.json());
 
+
 //JobSeeker Register
 app.post("/jobseekerregister" , async (req , res) => {
     const { jobseekerUsername , jobseekerEmail , jobseekerPassword } = req.body;
@@ -158,6 +159,29 @@ app.post("/companylogin" , async (req , res) => {
         });
     } finally {
         await client.close();
+    }
+});
+
+app.get('/api/profile/:username', async (req, res) => {
+    const { username } = req.params;
+    let user;
+    try {
+        const client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db("users");
+        const collection = database.collection("jobseeker");
+
+        user = await collection.findOne({ jobseekerUsername: username });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json(user);
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        res.status(500).json({ message: "Internal server error" });
+    } finally {
+        client.close();
     }
 });
 

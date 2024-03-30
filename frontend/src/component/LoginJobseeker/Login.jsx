@@ -16,7 +16,7 @@ function Login() {
             });
             console.log(response.data.message);
             if (response.data.success) {
-                navigate("/Profile");
+                navigate(`/Profile/${jobseekerIdentifier}`);
             } else {
                 setErrorMessage("Invalid username or password");
             }
