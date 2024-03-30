@@ -12,7 +12,7 @@ function Jobseekerprofile() {
 
     async function fetchUserProfile() {
         try {
-            const response = await fetch(`/api/profile/${username}`);
+            const response = await fetch(`/api/profile/jobseeker/${username}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch user profile");
             }

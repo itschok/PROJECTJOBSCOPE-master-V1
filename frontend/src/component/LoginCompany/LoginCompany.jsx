@@ -11,8 +11,8 @@ function LoginCompany() {
         event.preventDefault();
         try {
             const response = await axios.post("http://localhost:3000/companylogin", {
-                companyIdentifier: companyIdentifier,
-                companypassword: companypassword,
+                loginIdentifier: companyIdentifier,
+                companyPassword: companypassword,
             });
             console.log(response.data.message);
             if (response.data.success) {
