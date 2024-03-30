@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link  } from "react-router-dom";
 
 function CompanyRegister() {
     const [companyUsername, setCompanyUsername] = useState("");
@@ -22,7 +22,6 @@ function CompanyRegister() {
                 companyPassword, // ใช้ companyPassword แทน password
             });
             console.log(response.data.message);
-            // รับข้อมูลเมื่อลงทะเบียนเรียบร้อยแล้ว
         } catch (error) {
             console.error("Registration error:", error.response.data.message);
             setErrorMessage("Registration error: " + error.response.data.message);

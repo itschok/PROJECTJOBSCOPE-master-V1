@@ -1,4 +1,3 @@
-import React, { useState }  from "react";
 import { Link } from "react-router-dom";
 function NavLogin(){
     return(
@@ -11,7 +10,7 @@ function NavLogin(){
                 <Link to ="/CompanyLogin" className="text-gray-900 hover:text-orange-500 text-base">FOR COMPANY</Link>
                 </ul>
         </div>
-     </nav> 
+    </nav> 
     )
 }
 export default NavLogin

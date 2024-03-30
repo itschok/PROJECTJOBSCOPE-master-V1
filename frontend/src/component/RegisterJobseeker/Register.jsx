@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import axios from "axios";
 function Register() {
     const [jobseekerUsername, setJobSeekerUsername] = useState("");
@@ -7,6 +7,7 @@ function Register() {
     const [jobseekerPassword, setJobSeekerPassword] = useState("");
     const [jobseekerconfirmPassword, setJobSeekerConfirmPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -21,7 +22,11 @@ function Register() {
                 jobseekerPassword,
             });
             console.log(response.data.message);
-            // Redirect or perform other actions upon successful registration
+            if (response.data.success) {
+                navigate("/Login");
+            } else {
+                setErrorMessage("Login failed");
+            }
         } catch (error) {
             console.error("Registration error:", error.response.data.message);
             setErrorMessage("Registration error: " + error.response.data.message);
