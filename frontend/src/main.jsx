@@ -42,7 +42,7 @@ const router=createBrowserRouter([
     element:<Jobseekerhome/>
   },
   {
-    path:"/Profile",
+    path:"/Profile/:username",
     element:<Jobseekerprofilepage/>
   },
   {

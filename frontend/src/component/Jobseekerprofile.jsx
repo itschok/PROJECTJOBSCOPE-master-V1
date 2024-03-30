@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navprofile from "./NavProfile";
 
 function Jobseekerprofile() {
-    const [user , setUser] = useState(null);
+    const [user, setUser] = useState(null);
     const { username } = useParams();
 
     useEffect(() => {
@@ -30,47 +30,47 @@ function Jobseekerprofile() {
                     <img className="rounded-full border border-gray-500" src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-512.png" alt="User icon" width={200} />
                 </div>
                 <div className="py-2">
-                    <h1>{user.username}</h1>
+                    <h1>{user && user.username}</h1>
                     <input
                         type="text"
                         id="Name"
+                        placeholder="Enter Name"
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
-                    >
-                    </input>
+                    />
                 </div>
                     <h1>Email</h1>
                     <input
                         type="text"
                         id="Email"
+                        placeholder="Enter Email"
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
-                        >
-                    </input>
+                    />
                 <div className="py-3">
                     <h1>Status</h1>
                     <input
-                        type="blnk"
+                        type="text"
                         id="Statusongoing"
+                        placeholder="Enter Status"
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
-                        >
-                    </input>
+                    />
                 </div>
                 <div className="py-2">
                     <h1>Level of education</h1>
                     <input
                         type="text"
                         id="educationLevel"
+                        placeholder="Enter Education Level"
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
-                        >
-                    </input>
+                    />
                 </div>
                 <div className="py-2">
                     <h1>Job</h1>
                     <input
                         type="text"
                         id="job"
+                        placeholder="Enter Job"
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
-                        >
-                    </input>
+                    />
                 </div>
             </div>
         </>
