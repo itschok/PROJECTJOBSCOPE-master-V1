@@ -3,7 +3,7 @@ import React from "react";
 function Companyprofile() {
     return (
         <>
-            <div className='container mx-auto text-center'>
+            <div className='container mx-auto text-center py-5'>
                 <div className="flex justify-center">
                     <img className="rounded-full border border-gray-500" src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-512.png" alt="Company icon" width={200} />
                 </div>

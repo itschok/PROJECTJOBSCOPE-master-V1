@@ -30,7 +30,7 @@ function CompanyRegister() {
     };
 
     return (
-        <div className="container mx-auto py-8">
+        <div className="container mx-auto py-8 ">
             <div className="w-full max-w-md mx-auto bg-white rounded-lg border border-gray-200">
                 <h2 className="text-xl text-center text-gray-800 font-semibold py-4">Company Register</h2>
                 <form onSubmit={handleSubmit} className="px-8 py-6">

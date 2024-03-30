@@ -28,7 +28,7 @@ function InfoOne() {
 
   return (
     <div className="container mx-auto py-16">
-      <div className="px-6 border-2 border-orange-500 ">
+      <div className="px-6  ">
         <h2 className="text-3xl font-semibold">TOPCOMPANY</h2>
         <div className="w-full flex justify-between">
           <div className="w-1/3 p-4">

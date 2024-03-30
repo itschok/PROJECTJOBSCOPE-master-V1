@@ -7,7 +7,7 @@ function Navcompany(){
         setIsMenuopen(!isMenuopen)
     }
     return(
-    <nav className="p-4">
+    <nav className="p-4  border-b-4 border-blue-500">
         <div className="flex item-center space-x-10 justify-center">
             <div className="text-3xl font-black text-blue-500 "><Link to="/Company">JobScope</Link></div>
             {/*toggle menu button*/}
