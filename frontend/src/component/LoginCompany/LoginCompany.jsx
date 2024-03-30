@@ -19,10 +19,11 @@ function LoginCompany() {
                 
                 navigate("/");
             } else {
-                setErrorMessage("Registration failed");
+                setErrorMessage("Invalid username or password");
             }
         } catch (error) {
             console.error("Login error:", error.response.data.message);
+            setErrorMessage(error.response.data.message);
         }
     };
     return (
@@ -39,11 +40,11 @@ function LoginCompany() {
                     <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">Password</label>
                     <input type="password" id="companypassword" value={companypassword} onChange={(e) => setcompanypassword(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autoComplete="current-password" />
                 </div>
+                {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
                 <div className="flex items-center justify-between">
                     <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Sign In
                     </button>
-                    {/* Add links for registration or password reset */}
                     <Link to="/CompanyRegister" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
                         Register
                     </Link>

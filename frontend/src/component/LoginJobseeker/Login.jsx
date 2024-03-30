@@ -38,11 +38,11 @@ function Login() {
                     <label htmlFor="password" className="block text-gray-700  mb-2 font-semibold">Password</label>
                     <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autoComplete="current-password" />
                 </div>
+                {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
                 <div className="flex items-center justify-between">
                     <button type="submit" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Sign In
                     </button>
-                    {/* Add links for registration or password reset */}
                     <Link to="/Register" className="inline-block align-baseline font-bold text-sm text-orange-500 hover:text-orange-800">
                         Register
                     </Link>
