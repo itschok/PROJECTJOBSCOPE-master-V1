@@ -2,20 +2,22 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 function Login() {
-    const [jobseekerIdentifier, setJobSeekerUsername] = useState("");
+    const [jobseekerIdentifier, setJobSeekerIdentifier] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const response = await axios.post("http://localhost:3000/jobseekerlogin", {
-                username: jobseekerIdentifier,
-                password,
+                loginIdentifier: jobseekerIdentifier,
+                jobseekerPassword: password,
             });
             console.log(response.data.message);
             // Redirect or perform other actions upon successful login
         } catch (error) {
             console.error("Login error:", error.response.data.message);
+            setErrorMessage(error.response.data.message);
         }
     };
     return (
@@ -24,8 +26,8 @@ function Login() {
             <h2 className="text-xl  mb-4 text-center">JOBSEEKER LOGIN</h2>
             <form onSubmit={handleSubmit} className="max-w-sm mx-auto">
                 <div className="mb-4">
-                    <label htmlFor="username" className="block text-gray-700  mb-2 font-semibold">Username</label>
-                    <input type="text" id="username" value={jobseekerIdentifier} onChange={(e) => setJobSeekerUsername(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autoComplete="username" />
+                    <label htmlFor="jobseekerIdentifier" className="block text-gray-700  mb-2 font-semibold">Username</label>
+                    <input type="text" id="jobseekerIdentifier" value={jobseekerIdentifier} onChange={(e) => setJobSeekerIdentifier(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autoComplete="username" />
                 </div>
                 <div className="mb-6">
                     <label htmlFor="password" className="block text-gray-700  mb-2 font-semibold">Password</label>
