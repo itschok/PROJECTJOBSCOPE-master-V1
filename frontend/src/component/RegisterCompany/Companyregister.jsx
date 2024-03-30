@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
-import { Link  } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 
 function CompanyRegister() {
     const [companyUsername, setCompanyUsername] = useState("");
@@ -8,6 +8,7 @@ function CompanyRegister() {
     const [companyPassword, setCompanyPassword] = useState("");
     const [confirmCompanyPassword, setConfirmCompanyPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -22,6 +23,11 @@ function CompanyRegister() {
                 companyPassword, // ใช้ companyPassword แทน password
             });
             console.log(response.data.message);
+            if (response.data.success) {
+                navigate("/CompanyLogin"); //To Home Page 
+            } else {
+                setErrorMessage("Registration failed");
+            }
         } catch (error) {
             console.error("Registration error:", error.response.data.message);
             setErrorMessage("Registration error: " + error.response.data.message);

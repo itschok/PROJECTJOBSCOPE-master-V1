@@ -1,9 +1,11 @@
 import { useState } from "react";
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 function LoginCompany() {
     const [companyIdentifier, setCompanyIdentifier] = useState("");
     const [companypassword, setcompanypassword] = useState("");
+    const [errorMessage , setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -13,7 +15,12 @@ function LoginCompany() {
                 companypassword: companypassword,
             });
             console.log(response.data.message);
-            // Redirect or perform other actions upon successful login
+            if (response.data.success) {
+                
+                navigate("/");
+            } else {
+                setErrorMessage("Registration failed");
+            }
         } catch (error) {
             console.error("Login error:", error.response.data.message);
         }
