@@ -17,22 +17,22 @@ function Jobseekerprofileedit() {
                     </input>
                 </div>
                 <div className="py-2">
-                    <h1>Email</h1>
+                    <h1>Contact</h1>
                     <input
                         type="text"
-                        id="Email"
+                        id="Contact"
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                         placeholder="">
                     </input>
                 </div>
-                <div className="py-3">
-                    <h1>Status</h1>
-                    <select
-                        id="Statusongoing"
-                        className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl">
-                        <option value="Unemployed">Unemployed</option>
-                        <option value="Employed">Employed</option>
-                    </select>
+                <div className="py-2">
+                    <h1>Talent</h1>
+                    <input
+                        type="text"
+                        id="Talent"
+                        className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
+                        placeholder="">
+                    </input>
                 </div>
                 <div className="py-2">
                     <h1>Level of education</h1>
@@ -46,7 +46,7 @@ function Jobseekerprofileedit() {
                     </select>
                 </div>
                 {/* SAVE button */}
-                <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full">
+                <button type="submit" className="bg-orange-500 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     SAVE
                 </button>
             </div>

@@ -45,6 +45,31 @@ app.post("/jobseekerregister" , async (req , res) => {
     }
 });
 
+//Jobseekereditprofile
+app.post("/Editprofile" , async (req , res) => {
+    const { JobseekerName, JobseekerContact, JobseekerTalent} = req.body;
+    const client = new MongoClient(uri, { useNewUrlParser: true });
+    try {
+        await client.connect();
+        const database = client.db("users");
+        const collection = database.collection("jobseekerprofile");
+
+        const user = await collection.insertOne({ JobseekerName , JobseekerContact , JobseekerTalent});
+        res.json({
+            success : true,
+            message : "Edit Successful",
+        });
+    } catch (error) {
+        res.status(500).json({
+            success : false,
+            message : "Edit Failed",
+            error : error.message,
+        });
+    } finally {
+        await client.close();
+    }
+});
+
 //Company Register
 app.post("/companyregister" , async (req , res) => {
     const { companyUsername , companyEmail , companyPassword } = req.body;
@@ -58,7 +83,7 @@ app.post("/companyregister" , async (req , res) => {
         if (existingCompany) {
             return res.status(400).json({
                 success: false,
-                message: "Company Username or Email already exists",
+                message: "Company Username or JobseekerContact already exists",
             });
         }
 
