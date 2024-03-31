@@ -112,7 +112,7 @@ app.post("/companyregister" , async (req , res) => {
     }
 });
 
-//Jobseeker Login
+//Jobseeker Login 
 app.post("/jobseekerlogin" , async (req , res) => {
     const { loginIdentifier , jobseekerPassword } = req.body;
     const client = new MongoClient(uri, { useNewUrlParser: true });
