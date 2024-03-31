@@ -21,10 +21,12 @@ function Login() {
             } else {
                 setErrorMessage("Invalid username or password");
             }
+            localStorage.setItem('token', response.data.token);
         } catch (error) {
             console.error("Login error:", error.response.data.message);
             setErrorMessage(error.response.data.message);
         }
+
     };
     return (
         <>
