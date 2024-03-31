@@ -83,7 +83,7 @@ app.post("/companyregister" , async (req , res) => {
         if (existingCompany) {
             return res.status(400).json({
                 success: false,
-                message: "Company Username or JobseekerContact already exists",
+                message: "Company Username or Email already exists",
             });
         }
 
