@@ -5,7 +5,7 @@ function Companyprofile() {
         <>
             <div className='container mx-auto text-center py-5'>
                 <div className="flex justify-center">
-                    <img className="rounded-full border border-gray-500" src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-512.png" alt="Company icon" width={200} />
+                    <img className="rounded-full border border-gray-500" src="https://cdn0.iconfinder.com/data/icons/business-1390/24/20_-_Company-2-256.png" alt="Company icon" width={200} />
                 </div>
                 <div className="py-4">
                     <h1 className="text-3xl font-bold">Company Information</h1>

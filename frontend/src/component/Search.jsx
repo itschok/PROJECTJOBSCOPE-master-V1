@@ -45,11 +45,11 @@ function Search() {
                     </div>
                 </div>
             </div>
-            {/*<div className="border-2 rounded-3xl bg-white m-12 p-4 px-6 text-2xl relative flex justify-between">
+            <div className="border-2 rounded-3xl bg-white m-12 p-4 px-6 text-2xl relative flex justify-between">
                 <h1 className="text-5xl font-bold text-orange-500">Result</h1>
-                {/*<p className="px-6 py-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti dolor omnis tenetur excepturi totam quae nemo unde necessitatibus nobis consequuntur vero voluptas, eaque eum. Non fugit provident doloribus ipsum debitis.</p>
-                */}{/* Display search results here 
-            </div>*/}
+                <p className="px-6 py-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti dolor omnis tenetur excepturi totam quae nemo unde necessitatibus nobis consequuntur vero voluptas, eaque eum. Non fugit provident doloribus ipsum debitis.</p>
+            
+            </div>
         </div>
     );
 }
