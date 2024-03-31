@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Navprofile from "./NavProfile";
 
 function Jobseekerprofile() {
     const [user, setUser] = useState(null);
@@ -38,18 +37,18 @@ function Jobseekerprofile() {
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
                 </div>
-                    <h1>Email</h1>
+                    <h1>Contact</h1>
                     <input
                         type="text"
-                        id="Email"
+                        id="Contact"
                         placeholder="Enter Email"
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
                 <div className="py-3">
-                    <h1>Status</h1>
+                    <h1>Talent</h1>
                     <input
                         type="text"
-                        id="Statusongoing"
+                        id="Talent"
                         placeholder="Enter Status"
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
@@ -63,15 +62,9 @@ function Jobseekerprofile() {
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
                 </div>
-                <div className="py-2">
-                    <h1>Job</h1>
-                    <input
-                        type="text"
-                        id="job"
-                        placeholder="Enter Job"
-                        className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
-                    />
-                </div>
+                <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full">
+                    SAVE
+                </button>
             </div>
         </>
     );

@@ -10,7 +10,6 @@ import Companylogin from './Pagess/Companlogin'
 import CompanyRegis from './Pagess/CompanyRegis'
 import Jobseekerhome from './Pagess/Jobseekerhome'
 import Jobseekerprofilepage from './Pagess/Jobseekerprofilepage'
-import Jobseekereidtprofile from './Pagess/Jobseekereditprofile'
 import Myjobpage from './Pagess/Myjobpage'
 import Companyhomepage from './Pagess/Companyhomepage'
 import Companyprofilepage from './Pagess/Companyprofilepage'
@@ -44,12 +43,8 @@ const router=createBrowserRouter([
     element:<Jobseekerhome/>
   },
   {
-    path:"/Profile/:username",
+    path:"/Profile",
     element:<Jobseekerprofilepage/>
-  },
-  {
-    path:"/Editprofile",
-    element:<Jobseekereidtprofile/>
   },
   {
     path:"/Myjob",
