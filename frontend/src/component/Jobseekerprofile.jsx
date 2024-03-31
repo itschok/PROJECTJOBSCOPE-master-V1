@@ -4,20 +4,18 @@ import Navprofile from "./NavProfile";
 
 function Jobseekerprofile() {
     const [user, setUser] = useState(null);
-    const { username } = useParams();
+    const { jobseekerusername } = useParams();
 
     useEffect(() => {
         fetchUserProfile();
-    }, [username]);
+    }, [jobseekerusername]);
 
     async function fetchUserProfile() {
         try {
-            const response = await fetch(`/api/profile/jobseeker/${username}`);
+            const response = await fetch(`/api/profile/jobseeker/${jobseekerusername}`);
             if (!response.ok) {
-                throw new Error("Failed to fetch user profile");
+                throw new Error("Failed to fetch user profile" + response.status);
             }
-            const userData = await response.json();
-            setUser(userData);
         } catch (error) {
             console.error(error.message);
         }

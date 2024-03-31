@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const {MongoClient} =require("mongodb")
+const {MongoClient , GridFSBucket , ObjectId} =require("mongodb");
 const dotenv = require("dotenv");
+const fs = require('fs');
 
 dotenv.config();
 const uri =process.env.MONGO_URI ;
@@ -11,6 +12,39 @@ const app = express();
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(bodyParser.json());
 
+async function savePictureToMongoDB(filePath , fileName){
+    try {
+        const client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db('users');
+        const bucket = new GridFSBucket(database);
+        const stream = fs.createReadStream(filePath);
+
+        const uploadStream = bucket.openUploadStream(fileName);
+        stream.pipe(uploadStream);
+        await new Promise((resolve, reject) => {
+            uploadStream.on('finish', resolve);
+            uploadStream.on('error', reject);
+        });
+    } catch (error) {
+        console.error('Error saving picture file to MongoDB:', error);
+    } finally {
+        await client.close();
+    }
+}
+
+//Picture Upload
+app.post("/upload" , async (req , res ) => {
+    const {fileName , fileData} = req.body;
+
+    try {
+        await savePictureToMongoDB(fileData , fileName);
+        res.json({ success: true, message: "File uploaded successfully" });
+    } catch (error) {
+        console.error("Error uploading file:", error);
+        res.status(500).json({ success: false, message: "File upload failed" });
+    }
+})
 
 //JobSeeker Register
 app.post("/jobseekerregister" , async (req , res) => {
@@ -94,6 +128,7 @@ app.post("/jobseekerlogin" , async (req , res) => {
                 res.json({
                     success : true,
                     message : "Login Successful",
+                    jobseekerusername: user.jobseekerUsername
                 });
             } else {
                 res.status(401).json({
@@ -162,8 +197,9 @@ app.post("/companylogin" , async (req , res) => {
     }
 });
 
-app.get('/api/profile/jobseeker/:username', async (req, res) => {
-    const { username } = req.params;
+//JobSeekerUsername Profile
+app.get('/api/profile/jobseeker/:jobseekerusername', async (req, res) => {
+    const { jobseekerusername } = req.params;
     let user;
     try {
         const client = new MongoClient(uri, { useNewUrlParser: true });
@@ -171,7 +207,7 @@ app.get('/api/profile/jobseeker/:username', async (req, res) => {
         const database = client.db("users");
         const collection = database.collection("jobseeker");
 
-        user = await collection.findOne({ jobseekerUsername: username });
+        user = await collection.findOne({ jobseekerUsername: jobseekerusername});
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
