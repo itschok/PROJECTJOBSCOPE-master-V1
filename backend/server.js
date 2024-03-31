@@ -45,7 +45,7 @@ app.post("/jobseekerregister" , async (req , res) => {
     }
 });
 
-//Jobseekereditprofile
+//CreateJobseekerProfile
 app.post("/Editprofile" , async (req , res) => {
     const { JobseekerName, JobseekerContact, JobseekerTalent} = req.body;
     const client = new MongoClient(uri, { useNewUrlParser: true });
@@ -54,7 +54,7 @@ app.post("/Editprofile" , async (req , res) => {
         const database = client.db("users");
         const collection = database.collection("jobseekerprofile");
 
-        const user = await collection.insertOne({ JobseekerName , JobseekerContact , JobseekerTalent});
+        const user = await collection.insertOne({ JobseekerName , JobseekerContact , JobseekerTalent });
         res.json({
             success : true,
             message : "Edit Successful",
@@ -69,6 +69,42 @@ app.post("/Editprofile" , async (req , res) => {
         await client.close();
     }
 });
+
+//EditJobseekerProfile
+// app.get("/Editprofile/:jobSeekerId", async (req, res) => {
+//     const client = new MongoClient(uri, { useNewUrlParser: true });
+//     try {
+//         await client.connect();
+//         const database = client.db("users");
+//         const collection = database.collection("jobseekerprofile");
+
+//         const jobSeekerId = req.params.jobSeekerId;
+
+//         // Find the job seeker profile by jobSeekerId
+//         const jobSeekerProfile = await collection.findOne({ _id: jobSeekerId });
+
+//         if (!jobSeekerProfile) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Job seeker profile not found"
+//             });
+//         }
+
+//         res.json({
+//             success: true,
+//             jobSeekerProfile
+//         });
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: "Failed to fetch job seeker profile",
+//             error: error.message
+//         });
+//     } finally {
+//         await client.close();
+//     }
+// });
+
 
 //Company Register
 app.post("/companyregister" , async (req , res) => {
@@ -87,7 +123,7 @@ app.post("/companyregister" , async (req , res) => {
             });
         }
 
-        const user = await collection.insertOne({ companyUsername , companyEmail , companyPassword});
+        const user = await collection.insertOne({ companyUsername , companyEmail , companyPassword });
         res.json({
             success : true,
             message : "Registration Successful",
@@ -102,6 +138,67 @@ app.post("/companyregister" , async (req , res) => {
         await client.close();
     }
 });
+
+//CreateCompanyProfile
+app.post("/Companyprofile" , async (req , res) => {
+    const { CompanyName , CompanyEmail , CompanyLocation , Industry } = req.body;
+    const client = new MongoClient(uri, { useNewUrlParser: true });
+    try {
+        await client.connect();
+        const database = client.db("users");
+        const collection = database.collection("Companyprofile");
+
+        const user = await collection.insertOne({ CompanyName , CompanyEmail , CompanyLocation , Industry });
+        res.json({
+            success : true,
+            message : "Edit Successful",
+        });
+    } catch (error) {
+        res.status(500).json({
+            success : false,
+            message : "Edit Failed",
+            error : error.message,
+        });
+    } finally {
+        await client.close();
+    }
+});
+
+//EditCompanyProfile
+// app.get("/Companyprofile/:companyId", async (req, res) => {
+//     const client = new MongoClient(uri, { useNewUrlParser: true });
+//     try {
+//         await client.connect();
+//         const database = client.db("users");
+//         const collection = database.collection("Companyprofile");
+
+//         const companyId = req.params.companyId;
+
+//         // Find the company profile by companyId
+//         const companyProfile = await collection.findOne({ _id: companyId });
+
+//         if (!companyProfile) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Company profile not found"
+//             });
+//         }
+
+//         res.json({
+//             success: true,
+//             companyProfile
+//         });
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: "Failed to fetch company profile",
+//             error: error.message
+//         });
+//     } finally {
+//         await client.close();
+//     }
+// });
+
 
 //Jobseeker Login
 app.post("/jobseekerlogin" , async (req , res) => {
