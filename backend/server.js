@@ -149,7 +149,7 @@ app.post("/jobseekerlogin" , async (req , res) => {
         const isEmail = loginIdentifier.includes('@');
         const user = isEmail ? await collection.findOne({jobseekerEmail : loginIdentifier}) : await collection.findOne({ jobseekerUsername : loginIdentifier });
         if(user) {
-            const match = await bcrypt.compare(jobseekerPassword , user.jobseekerPassword);
+            const match = await bcrypt.compare(jobseekerPassword , user.jobseekerHashPassword);
             if(match) {
                 const token = jwt.sign({ jobseekerUsername : user.jobseekerUsername }, process.env.SECRET, { 
                     expiresIn: '1h' 
@@ -195,7 +195,7 @@ app.post("/companylogin" , async (req , res) => {
         const isEmail = loginIdentifier.includes('@');
         const user = isEmail ? await collection.findOne({companyEmail : loginIdentifier}) : await collection.findOne({ companyUsername : loginIdentifier });
         if(user) {
-            const match = await bcrypt.compare(companyPassword , user.companyPassword);
+            const match = await bcrypt.compare(companyPassword , user.companyHashPassword);
             if(match) {
                 const token = jwt.sign({ companyUsername : user.companyUsername }, process.env.SECRET, { 
                     expiresIn: '1h' 
