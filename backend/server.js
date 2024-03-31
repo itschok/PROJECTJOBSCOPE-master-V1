@@ -3,10 +3,13 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const {MongoClient , GridFSBucket , ObjectId} =require("mongodb");
 const dotenv = require("dotenv");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const fs = require('fs');
 
 dotenv.config();
 const uri =process.env.MONGO_URI ;
+const saltRounds = process.env.SALT_ROUNDS;
 
 const app = express();
 app.use(cors({ origin: 'http://localhost:5173' }));
@@ -50,11 +53,19 @@ app.post("/upload" , async (req , res ) => {
 app.post("/jobseekerregister" , async (req , res) => {
     const { jobseekerUsername , jobseekerEmail , jobseekerPassword } = req.body;
     const client = new MongoClient(uri, { useNewUrlParser: true });
+
+    if (!jobseekerUsername || !jobseekerEmail || !jobseekerPassword) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields",
+        });
+    }
+
     try {
         await client.connect();
         const database = client.db("users");
         const collection = database.collection("jobseeker");
-
+        
         const existingJobseeker = await collection.findOne({ $or: [{ jobseekerUsername }, { jobseekerEmail }] });
         if (existingJobseeker) {
             return res.status(400).json({
@@ -63,7 +74,11 @@ app.post("/jobseekerregister" , async (req , res) => {
             });
         }
 
-        const user = await collection.insertOne({ jobseekerUsername , jobseekerEmail , jobseekerPassword});
+        const jobseekerHashPassword = await bcrypt.hash(jobseekerPassword , parseInt(saltRounds));
+        const user = await collection.insertOne({ 
+            jobseekerUsername , 
+            jobseekerEmail , 
+            jobseekerHashPassword});
         res.json({
             success : true,
             message : "Registration Successful",
@@ -83,6 +98,14 @@ app.post("/jobseekerregister" , async (req , res) => {
 app.post("/companyregister" , async (req , res) => {
     const { companyUsername , companyEmail , companyPassword } = req.body;
     const client = new MongoClient(uri, { useNewUrlParser: true });
+
+    if (!companyUsername || !companyEmail || !companyPassword) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields",
+        });
+    }
+
     try {
         await client.connect();
         const database = client.db("users");
@@ -95,8 +118,11 @@ app.post("/companyregister" , async (req , res) => {
                 message: "Company Username or Email already exists",
             });
         }
-
-        const user = await collection.insertOne({ companyUsername , companyEmail , companyPassword});
+        const companyHashPassword = await bcrypt.hash(companyPassword , parseInt(saltRounds));
+        const user = await collection.insertOne({ 
+            companyUsername , 
+            companyEmail , 
+            companyHashPassword});
         res.json({
             success : true,
             message : "Registration Successful",
@@ -123,11 +149,15 @@ app.post("/jobseekerlogin" , async (req , res) => {
         const isEmail = loginIdentifier.includes('@');
         const user = isEmail ? await collection.findOne({jobseekerEmail : loginIdentifier}) : await collection.findOne({ jobseekerUsername : loginIdentifier });
         if(user) {
-            const match = await collection.findOne({ jobseekerPassword });
+            const match = await bcrypt.compare(jobseekerPassword , user.jobseekerPassword);
             if(match) {
+                const token = jwt.sign({ jobseekerUsername : user.jobseekerUsername }, process.env.SECRET, { 
+                    expiresIn: '1h' 
+                });
                 res.json({
                     success : true,
                     message : "Login Successful",
+                    token : token,
                     jobseekerusername: user.jobseekerUsername
                 });
             } else {
@@ -162,16 +192,18 @@ app.post("/companylogin" , async (req , res) => {
         await client.connect();
         const database = client.db("users");
         const collection = database.collection("companies");
-
         const isEmail = loginIdentifier.includes('@');
-
         const user = isEmail ? await collection.findOne({companyEmail : loginIdentifier}) : await collection.findOne({ companyUsername : loginIdentifier });
         if(user) {
-            const match = await collection.findOne({ companyPassword : companyPassword });
+            const match = await bcrypt.compare(companyPassword , user.companyPassword);
             if(match) {
+                const token = jwt.sign({ companyUsername : user.companyUsername }, process.env.SECRET, { 
+                    expiresIn: '1h' 
+                });
                 res.json({
                     success : true,
                     message : "Login Successful",
+                    token : token,
                 });
             } else {
                 res.status(401).json({
@@ -241,6 +273,44 @@ app.get('/api/profile/companies/:username', async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     } finally {
         client.close();
+    }
+});
+
+function verifyToken(req , res , next) {
+    const token = req.headers["authorization"];
+    if (typeof token != "undefined") {
+        jwt.verify(token , process.env.SECRET , (err , authData) => {
+            if(err) {
+                res.sendStatus(403);
+            } else {
+                next();
+            }
+        });
+    } else {
+        res.sendStatus(403);
+    }
+}
+
+app.get("/jobseekerusers" , verifyToken , async (req , res) => {
+    const client = new MongoClient(uri , { useUnifiedTopology : true});
+    try {
+        await client.connect();
+        const database = client.db("users");
+        const collection = database.collection("jobseeker");
+
+        const users = await collection.find({}).toArray();
+        res.json({
+            success : true,
+            message : "Get users successful",
+            data : users,
+        });
+    } catch (error) {
+        res.json({
+            success : false,
+            message : "Get users failed",
+        });
+    } finally {
+        await client.close();
     }
 });
 

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Navprofile from "./NavProfile";
 
 function Jobseekerprofile() {
+    const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
     const { jobseekerusername } = useParams();
 
@@ -16,10 +17,17 @@ function Jobseekerprofile() {
             if (!response.ok) {
                 throw new Error("Failed to fetch user profile" + response.status);
             }
+            const userData = await response.json();
+            setUser(userData);
+            setError(null); // Clear any previous error
         } catch (error) {
             console.error(error.message);
+            setUser(null); // Reset user to null
+            setError("Failed to fetch user profile"); // Set error message
         }
     }
+
+    
 
     return (
         <>
