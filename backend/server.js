@@ -265,6 +265,35 @@ app.get('/api/profile/jobseeker/:jobseekerusername', async (req, res) => {
     }
 });
 
+//JobseekerProfileEdit
+app.post('/api/profile/jobseeker/:jobseekerusername/update' , async (req , res) => {
+    const { jobseekerusername } = req.params;
+    const { Name, Email, EducationLevel, Job } = req.body;
+    let client
+    try {
+        client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db("users");
+        const collection = database.collection("jobseeker");
+
+        const filter = { jobseekerUsername : jobseekerusername };
+        const update = { $set: { Name, Email, EducationLevel, Job } };
+
+        const result = await collection.updateOne(filter, update);
+
+        if (result.modifiedCount === 1) {
+            res.json({ success: true, message: "Profile updated successfully" });
+        } else {
+            res.status(404).json({ success: false, message: "User not found or profile not updated" });
+        }
+    } catch (error) {
+        console.error("Error updating user profile:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    } finally {
+        await client.close();
+    }
+})
+
 app.get('/api/profile/companies/:username', async (req, res) => {
     const { username } = req.params;
     let user;
@@ -295,6 +324,7 @@ function verifyToken(req , res , next) {
             if(err) {
                 res.sendStatus(403);
             } else {
+                req.authData = authData;
                 next();
             }
         });
