@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Navprofile from "./NavProfile";
+import { useEffect, useState } from "react";
+import { useParams , Navigate } from "react-router-dom";
 
 function Jobseekerprofile() {
     const [error, setError] = useState(null);
@@ -13,21 +12,21 @@ function Jobseekerprofile() {
 
     async function fetchUserProfile() {
         try {
-            const response = await fetch(`/api/profile/jobseeker/${jobseekerusername}`);
+            const response = await fetch(`/api/profile/jobseeker/${jobseekerusername}`, {
+                credentials: 'include' ,
+            });
             if (!response.ok) {
-                throw new Error("Failed to fetch user profile" + response.status);
+                throw new Error('Failed to fetch user profile');
             }
-            const userData = await response.json();
-            setUser(userData);
-            setError(null); // Clear any previous error
         } catch (error) {
-            console.error(error.message);
-            setUser(null); // Reset user to null
-            setError("Failed to fetch user profile"); // Set error message
+            setUser(null);
+            setError("Failed to fetch user profile");
         }
     }
 
-    
+    if (!user) {
+        return <Navigate to="/error" />; // Redirect to an error page or any other page
+    }
 
     return (
         <>

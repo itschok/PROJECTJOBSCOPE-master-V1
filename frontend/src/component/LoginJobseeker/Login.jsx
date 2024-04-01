@@ -13,7 +13,9 @@ function Login() {
             const response = await axios.post("http://localhost:3000/jobseekerlogin", {
                 loginIdentifier: jobseekerIdentifier,
                 jobseekerPassword: password,
-            });
+            } , {
+                withCredentials : true
+            }); 
             console.log(response.data.message);
             if (response.data.success) {
                 const jobseekerusername = response.data.jobseekerusername;
@@ -21,7 +23,6 @@ function Login() {
             } else {
                 setErrorMessage("Invalid username or password");
             }
-            localStorage.setItem('token', response.data.token);
         } catch (error) {
             console.error("Login error:", error.response.data.message);
             setErrorMessage(error.response.data.message);

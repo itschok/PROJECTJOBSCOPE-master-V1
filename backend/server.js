@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const {MongoClient , GridFSBucket , ObjectId} =require("mongodb");
 const dotenv = require("dotenv");
 const jwt = require('jsonwebtoken');
@@ -12,8 +13,9 @@ const uri =process.env.MONGO_URI ;
 const saltRounds = process.env.SALT_ROUNDS;
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ credentials: true , origin: ['http://localhost:5173'] , }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 async function savePictureToMongoDB(filePath , fileName){
     try {
@@ -154,10 +156,15 @@ app.post("/jobseekerlogin" , async (req , res) => {
                 const token = jwt.sign({ jobseekerUsername : user.jobseekerUsername }, process.env.SECRET, { 
                     expiresIn: '1h' 
                 });
+                res.cookie('token' , token , {
+                    maxAge : 300000,
+                    secure : true,
+                    httpOnly : true,
+                    sameSite : "none",
+                });
                 res.json({
                     success : true,
                     message : "Login Successful",
-                    token : token,
                     jobseekerusername: user.jobseekerUsername
                 });
             } else {
@@ -200,10 +207,15 @@ app.post("/companylogin" , async (req , res) => {
                 const token = jwt.sign({ companyUsername : user.companyUsername }, process.env.SECRET, { 
                     expiresIn: '1h' 
                 });
+                res.cookie('token' , token , {
+                    maxAge : 300000,
+                    secure : true,
+                    httpOnly : true,
+                    sameSite : "none",
+                });
                 res.json({
                     success : true,
                     message : "Login Successful",
-                    token : token,
                 });
             } else {
                 res.status(401).json({
@@ -277,9 +289,9 @@ app.get('/api/profile/companies/:username', async (req, res) => {
 });
 
 function verifyToken(req , res , next) {
-    const token = req.headers["authorization"];
-    if (typeof token != "undefined") {
-        jwt.verify(token , process.env.SECRET , (err , authData) => {
+    const authToken = req.cookies.token
+    if (typeof authToken != "undefined") {
+        jwt.verify(authToken , process.env.SECRET , (err , authData) => {
             if(err) {
                 res.sendStatus(403);
             } else {
