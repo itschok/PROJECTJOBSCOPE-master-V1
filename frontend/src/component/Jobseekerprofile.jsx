@@ -18,15 +18,17 @@ function Jobseekerprofile() {
             if (!response.ok) {
                 throw new Error('Failed to fetch user profile');
             }
+            const userData = await response.json();
+            setUser(userData);
         } catch (error) {
             setUser(null);
             setError("Failed to fetch user profile");
         }
     }
 
-    if (!user) {
-        return <Navigate to="/error" />; // Redirect to an error page or any other page
-    }
+    // if (!user) {
+    //     return <Navigate to="/error" />; // Redirect to an error page or any other page
+    // }
 
     return (
         <>
@@ -35,11 +37,11 @@ function Jobseekerprofile() {
                     <img className="rounded-full border border-gray-500" src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-512.png" alt="User icon" width={200} />
                 </div>
                 <div className="py-2">
-                    <h1>{user && user.username}</h1>
+                    <h1>Name</h1>
                     <input
                         type="text"
                         id="Name"
-                        placeholder="Enter Name"
+                        placeholder={user ? user.name : "-"}
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
                 </div>

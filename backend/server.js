@@ -244,9 +244,9 @@ app.post("/companylogin" , async (req , res) => {
 //JobSeekerUsername Profile
 app.get('/api/profile/jobseeker/:jobseekerusername', async (req, res) => {
     const { jobseekerusername } = req.params;
-    let user;
+    let user , client;
     try {
-        const client = new MongoClient(uri, { useNewUrlParser: true });
+        client = new MongoClient(uri, { useNewUrlParser: true });
         await client.connect();
         const database = client.db("users");
         const collection = database.collection("jobseeker");

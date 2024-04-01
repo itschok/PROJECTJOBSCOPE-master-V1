@@ -19,7 +19,7 @@ function Login() {
             console.log(response.data.message);
             if (response.data.success) {
                 const jobseekerusername = response.data.jobseekerusername;
-                navigate(`/Profile/${jobseekerusername}`);
+                navigate(`/Editprofile/${jobseekerusername}`);
             } else {
                 setErrorMessage("Invalid username or password");
             }

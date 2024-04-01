@@ -44,11 +44,11 @@ const router=createBrowserRouter([
     element:<Jobseekerhome/>
   },
   {
-    path:"/Profile/:username",
+    path:"/Profile/:jobseekerusername",
     element:<Jobseekerprofilepage/>
   },
   {
-    path:"/Editprofile",
+    path:"/Editprofile/:jobseekerusername",
     element:<Jobseekereidtprofile/>
   },
   {

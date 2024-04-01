@@ -9,7 +9,7 @@ function LeftMenu() {
                         <a href="/Profile" className="border-2  hover:bg-orange-500 px-4">Profile</a>
                     </li>
                     <li className="py-2 text-xl">
-                        <a href="/Editprofile" className="border-2  hover:bg-orange-500 px-4">Edit Profile</a>
+                        <a href="/Editprofile/:jobseekerusername" className="border-2  hover:bg-orange-500 px-4">Edit Profile</a>
                     </li>
                 </ul>
             </div>
