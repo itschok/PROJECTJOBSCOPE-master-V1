@@ -266,10 +266,11 @@ app.get('/api/profile/jobseeker/:jobseekerusername', async (req, res) => {
 });
 
 //JobseekerProfileEdit
-app.post('/api/profile/jobseeker/:jobseekerusername/update' , async (req , res) => {
+app.post('/api/profile/jobseeker/:jobseekerusername/update' , verifyToken , async (req , res) => {
     const { jobseekerusername } = req.params;
     const { Name, Email, EducationLevel, Job } = req.body;
     let client
+
     try {
         client = new MongoClient(uri, { useNewUrlParser: true });
         await client.connect();
@@ -289,10 +290,8 @@ app.post('/api/profile/jobseeker/:jobseekerusername/update' , async (req , res) 
     } catch (error) {
         console.error("Error updating user profile:", error);
         res.status(500).json({ success: false, message: "Internal server error" });
-    } finally {
-        await client.close();
-    }
-})
+    } 
+});
 
 app.get('/api/profile/companies/:username', async (req, res) => {
     const { username } = req.params;
