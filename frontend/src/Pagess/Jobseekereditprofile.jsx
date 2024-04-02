@@ -7,7 +7,6 @@ function Jobseekereidtprofile(){
     return(
         <>
         <Navprofile/>
-        <LeftMenu/>
         <Jobseekerprofileedit/>
         </>
     )

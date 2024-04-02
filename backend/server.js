@@ -257,7 +257,7 @@ app.post('/api/postjob/:companyusername' , async (req , res) => {
                 JobName : JobName ,
                 Location : Location ,
                 Position : Position ,
-                Salary : Salary ,
+                Salary : parseFloat(Salary) ,
                 Description : Description ,
             });
             res.json({
@@ -315,15 +315,21 @@ app.get('/api/profile/jobseeker/:jobseekerusername', async (req, res) => {
         const database = client.db("users");
         const collection = database.collection("jobseeker");
 
-        user = await collection.findOne({ jobseekerUsername: jobseekerusername});
+        user = await collection.findOne({ 
+            jobseekerUsername: jobseekerusername
+        });
 
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ 
+                message: "User not found" 
+            });
         }
         res.json(user);
     } catch (error) {
         console.error("Error fetching user profile:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ 
+            message: "Internal server error" 
+        });
     } finally {
         client.close();
     }

@@ -18,7 +18,7 @@ function LoginCompany() {
             });
             console.log(response.data.message);
             if (response.data.success) {
-                navigate("/");
+                navigate("/Companyhome");
             } else {
                 setErrorMessage("Invalid username or password");
             }
