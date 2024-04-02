@@ -31,8 +31,9 @@ function Navcompanyprofile(){
             <ul className='hidden md:flex space-x-9 items-end'>
             <Link to ={`/Companyhome/${companyusername}`} className="text-gray-900  hover:text-orange-500 text-base">HOME</Link>
                 <Link to ={`/Companyprofile/${companyusername}`} className="text-gray-900  hover:text-blue-500 text-base">MYCOMPANY</Link>
-                <Link to = "/CompanyLogin" className="text-gray-900  hover:text-blue-500 text-base">LIST</Link>
-                <Link to="/Company" className="text-gray-900 hover:text-blue-500 text-base">LOGOUT</Link>
+                <Link to = "/Mypostpage" className="text-gray-900  hover:text-blue-500 text-base">LIST</Link>
+                <Link to="/Applicant" className="text-gray-900 hover:text-blue-500 text-base">Applicant</Link>
+                <Link to="/" className="text-gray-900 hover:text-blue-500 text-base">LOGOUT</Link>
                 <Link to={`/Postjobpage/${companyusername}`} className="border-blue-500 texet-base">PostJob</Link>
                 </ul>
             </div>
