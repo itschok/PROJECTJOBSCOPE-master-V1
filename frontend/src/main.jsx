@@ -15,6 +15,8 @@ import Myjobpage from './Pagess/Myjobpage'
 import Companyhomepage from './Pagess/Companyhomepage'
 import Companyprofilepage from './Pagess/Companyprofilepage'
 import Postjobpage from './Pagess/Postjob'
+import Mypostpage from './Pagess/Mypostpage'
+import Applicantpage from './Pagess/Applicantpage'
 const router=createBrowserRouter([
   {
     path:"/",
@@ -41,7 +43,7 @@ const router=createBrowserRouter([
     element:<CompanyRegis/>
   },
   {
-    path:"/Jobseekerhome",
+    path:"/Jobseekerhome/:jobseekerusername",
     element:<Jobseekerhome/>
   },
   {
@@ -53,11 +55,11 @@ const router=createBrowserRouter([
     element:<Jobseekereidtprofile/>
   },
   {
-    path:"/Myjob/:companyusername",
+    path:"/Myjob/:jobseekerusername",
     element:<Myjobpage/>
   },
   {
-    path:"/Companyhome",
+    path:"/Companyhome/:companyusername",
     element:<Companyhomepage/>
   },
   {
@@ -67,8 +69,15 @@ const router=createBrowserRouter([
   {
     path:"/Postjobpage/:companyusername",
     element:<Postjobpage/>
+  },
+  {
+    path:"/Mypostpage",
+    element:<Mypostpage/>
+  },
+  {
+    path:"/Applicant",
+    element:<Applicantpage/>
   }
-
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

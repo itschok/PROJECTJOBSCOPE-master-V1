@@ -1,12 +1,13 @@
 import React from "react";
 import Navcompanyprofile from "../component/Companyprofilehome/Navcompanyprofile";
-import Postjob from "../component/Companyprofilehome/Postjob";
-function Postjobpage(){
+import Applicant from "../component/Companyprofilehome/Applicant";
+function Applicantpage(){
     return(
         <>
         <Navcompanyprofile/>
-        <Postjob/>
+        <Applicant/>
         </>
     )
+
 }
-export default Postjobpage
+export default Applicantpage

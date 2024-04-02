@@ -1,12 +1,12 @@
 import React from "react";
 import Navcompanyprofile from "../component/Companyprofilehome/Navcompanyprofile";
-import Postjob from "../component/Companyprofilehome/Postjob";
-function Postjobpage(){
+import Mypost from "../component/Companyprofilehome/Mypost";
+function Mypostpage(){
     return(
         <>
         <Navcompanyprofile/>
-        <Postjob/>
+        <Mypost/>
         </>
     )
 }
-export default Postjobpage
+export default Mypostpage
