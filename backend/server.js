@@ -216,6 +216,7 @@ app.post("/companylogin" , async (req , res) => {
                 res.json({
                     success : true,
                     message : "Login Successful",
+                    companyusername: user.companyUsername
                 });
             } else {
                 res.status(401).json({
@@ -305,7 +306,7 @@ app.post('/api/postjob/:companyusername' , async (req , res) => {
     }
 });
 
-//JobSeekerUsername Profile
+//Get JobSeekerUsername
 app.get('/api/profile/jobseeker/:jobseekerusername', async (req, res) => {
     const { jobseekerusername } = req.params;
     let user , client;
@@ -330,6 +331,30 @@ app.get('/api/profile/jobseeker/:jobseekerusername', async (req, res) => {
         res.status(500).json({ 
             message: "Internal server error" 
         });
+    } finally {
+        client.close();
+    }
+});
+
+//Get CompanyUsername
+app.get('/api/profile/companies/:companyusername', async (req, res) => {
+    const { companyusername } = req.params;
+    let user , client;
+    try {
+        client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db("users");
+        const collection = database.collection("companies");
+
+        user = await collection.findOne({ companyUsername : companyusername });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json(user);
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        res.status(500).json({ message: "Internal server error" });
     } finally {
         client.close();
     }
@@ -361,29 +386,6 @@ app.post('/api/profile/jobseeker/:jobseekerusername/update' , verifyToken , asyn
         console.error("Error updating user profile:", error);
         res.status(500).json({ success: false, message: "Internal server error" });
     } 
-});
-
-app.get('/api/profile/companies/:username', async (req, res) => {
-    const { username } = req.params;
-    let user;
-    try {
-        const client = new MongoClient(uri, { useNewUrlParser: true });
-        await client.connect();
-        const database = client.db("users");
-        const collection = database.collection("companies");
-
-        user = await collection.findOne({ companyUsername : username });
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        res.json(user);
-    } catch (error) {
-        console.error("Error fetching user profile:", error);
-        res.status(500).json({ message: "Internal server error" });
-    } finally {
-        client.close();
-    }
 });
 
 function verifyToken(req , res , next) {
