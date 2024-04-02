@@ -1,5 +1,5 @@
-import { useState , useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useParams , useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Jobseekerprofileedit() {
@@ -9,9 +9,10 @@ function Jobseekerprofileedit() {
         EducationLevel: "",
         Job: "" ,
     });
-
-    const { jobseekerusername } = useParams();
     
+    const navigate = useNavigate();
+    const { jobseekerusername } = useParams();
+
     const handleChange = (event) => {
         const { id, value } = event.target;
         setFormData({ ...formData, [id]: value });
@@ -20,17 +21,16 @@ function Jobseekerprofileedit() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:3000//api/profile/jobseeker/${jobseekerusername}/update`, formData , {
+            const response = await axios.post(`http://localhost:3000/api/profile/jobseeker/${jobseekerusername}/update`, formData , {
                 withCredentials: true ,
             });
 
             if (response.data.success) {
-                alert("Profile updated successfully");
+                navigate(`/Profile/${jobseekerusername}`);
             } else {
                 throw new Error("Failed to update profile");
             }
         } catch (error) {
-            console.error("Error updating profile:", error);
             alert("Failed to update profile. Please try again later.");
         }
     };

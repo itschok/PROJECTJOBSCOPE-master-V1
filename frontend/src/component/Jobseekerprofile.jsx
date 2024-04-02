@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams , Navigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function Jobseekerprofile() {
-    const [error, setError] = useState(null);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({});
     const { jobseekerusername } = useParams();
 
     useEffect(() => {
@@ -12,23 +12,15 @@ function Jobseekerprofile() {
 
     async function fetchUserProfile() {
         try {
-            const response = await fetch(`/api/profile/jobseeker/${jobseekerusername}`, {
-                credentials: 'include' ,
+            const response = await axios.get(`http://localhost:3000/api/profile/jobseeker/${jobseekerusername}`, {
+                withCredentials: true,
             });
-            if (!response.ok) {
-                throw new Error('Failed to fetch user profile');
-            }
-            const userData = await response.json();
+            const userData = response.data;
             setUser(userData);
         } catch (error) {
             setUser(null);
-            setError("Failed to fetch user profile");
         }
     }
-
-    // if (!user) {
-    //     return <Navigate to="/error" />; // Redirect to an error page or any other page
-    // }
 
     return (
         <>
@@ -41,7 +33,8 @@ function Jobseekerprofile() {
                     <input
                         type="text"
                         id="Name"
-                        placeholder={user ? user.name : "-"}
+                        value = {user.Name || ""}
+                        readOnly
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
                 </div>
@@ -49,15 +42,17 @@ function Jobseekerprofile() {
                     <input
                         type="text"
                         id="Email"
-                        placeholder="Enter Email"
+                        value = {user.Email || ""}
+                        readOnly
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
                 <div className="py-3">
                     <h1>Status</h1>
                     <input
                         type="text"
-                        id="Statusongoing"
-                        placeholder="Enter Status"
+                        id="Status"
+                        value = {user.Status || ""}
+                        readOnly
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
                 </div>
@@ -65,8 +60,9 @@ function Jobseekerprofile() {
                     <h1>Level of education</h1>
                     <input
                         type="text"
-                        id="educationLevel"
-                        placeholder="Enter Education Level"
+                        id="EducationLevel"
+                        value = {user.EducationLevel || ""}
+                        readOnly
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
                 </div>
@@ -74,8 +70,9 @@ function Jobseekerprofile() {
                     <h1>Job</h1>
                     <input
                         type="text"
-                        id="job"
-                        placeholder="Enter Job"
+                        id="Job"
+                        value = {user.Job || ""}
+                        readOnly
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
                 </div>
