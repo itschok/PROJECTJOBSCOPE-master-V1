@@ -14,6 +14,7 @@ function Mypost() {
         try {
             const response = await axios.get(`http://localhost:3000/api/getPostedJob/${companyusername}`);
             setPostedJobs(response.data.data);
+            console.log(postedJobs);
         } catch (error) {
             console.error("Error fetching posted jobs:", error);
         }
@@ -26,6 +27,7 @@ function Mypost() {
                 <td className="py-3 text-center align-middle">{job.Location}</td>
                 <td className="py-3 text-center align-middle">{job.Position}</td>
                 <td className="py-3 text-center align-middle">{job.Salary}</td>
+                <td className="py-3 text-center align-middle">{job.Description}</td>
                 <td className="py-3 text-center align-middle">
                     <Link to={`/${companyusername}/editjob/${job._id}`} className="text-blue-500 hover:text-blue-800 font-semibold">
                         Edit
@@ -46,6 +48,7 @@ function Mypost() {
                             <th className="px-4 py-2">Location</th>
                             <th className="px-4 py-2">Position</th>
                             <th className="px-4 py-2">Salary</th>
+                            <th className="px-4 py-2">Description</th>
                             <th className="px-4 py-2">Actions</th>
                         </tr>
                     </thead>

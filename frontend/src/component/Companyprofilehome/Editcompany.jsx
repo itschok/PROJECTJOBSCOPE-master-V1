@@ -17,7 +17,7 @@ function EditPostjob() {
     useEffect(() => {
         const fetchJobData = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/getjob/${companyusername}/${jobid}`, {
+                const response = await axios.get(`http://localhost:3000/api/getjob/${companyusername}`, {
                     withCredentials: true,
                 });
                 const { job } = response.data;
@@ -45,7 +45,7 @@ function EditPostjob() {
     const handleEdit = async (event) => {
         event.preventDefault();
         try {
-            await axios.put(`http://localhost:3000/api/editjob/${companyusername}/${jobid}`, formData, {
+            await axios.pull(`http://localhost:3000/api/editjob/${companyusername}`, formData, {
                 withCredentials: true,
             });
             alert("Edit Complete");
