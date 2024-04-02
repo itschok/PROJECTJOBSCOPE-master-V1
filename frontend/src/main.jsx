@@ -14,10 +14,7 @@ import Jobseekereidtprofile from './Pagess/Jobseekereditprofile'
 import Myjobpage from './Pagess/Myjobpage'
 import Companyhomepage from './Pagess/Companyhomepage'
 import Companyprofilepage from './Pagess/Companyprofilepage'
-<<<<<<< Updated upstream
-=======
 import Postjobpage from './Pagess/Postjob'
->>>>>>> Stashed changes
 const router=createBrowserRouter([
   {
     path:"/",
@@ -66,13 +63,10 @@ const router=createBrowserRouter([
   {
     path:"/Companyprofile",
     element:<Companyprofilepage/>
-<<<<<<< Updated upstream
-=======
   },
   {
     path:"/Postjobpage/:companyusername",
     element:<Postjobpage/>
->>>>>>> Stashed changes
   }
 
 ])
