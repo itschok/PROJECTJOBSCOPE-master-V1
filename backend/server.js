@@ -429,6 +429,30 @@ app.get("/api/getPostedJob/:companyusername" , async (req , res) => {
     }
 });
 
+//getAllPost
+app.get("/api/getAllPostedJob" , async (req , res) => {
+    const client = new MongoClient(uri , { useNewUrlParser : true });
+    try {
+        await client.connect();
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+
+        const allPostedJobs = await collection.find({}).toArray();
+        res.json({
+            success: true,
+            message: "Retrieved all posted jobs",
+            data: allPostedJobs,
+        });
+    } catch (error) {
+        res.json({
+            success : false,
+            message : "Nope"
+        })
+    } finally {
+        await client.close();
+    }
+});
+
 app.get("/jobseekerusers" , verifyToken , async (req , res) => {
     const client = new MongoClient(uri , { useUnifiedTopology : true});
     try {
