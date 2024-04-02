@@ -53,7 +53,7 @@ const router=createBrowserRouter([
     element:<Jobseekereidtprofile/>
   },
   {
-    path:"/Myjob",
+    path:"/Myjob/:companyusername",
     element:<Myjobpage/>
   },
   {
@@ -61,7 +61,7 @@ const router=createBrowserRouter([
     element:<Companyhomepage/>
   },
   {
-    path:"/Companyprofile",
+    path:"/Companyprofile/:companyusername",
     element:<Companyprofilepage/>
   },
   {

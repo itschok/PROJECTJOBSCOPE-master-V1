@@ -5,7 +5,7 @@ import axios from "axios";
 function Postjob() {
     const [formData , setFormData] = useState({
         ActionCommand : "create" ,
-        JobName = "" ,
+        JobName : "" ,
         Location : "" ,
         Position : "" ,
         Salary : "" , 
@@ -14,26 +14,18 @@ function Postjob() {
 
     const handleChange = (event) => {
         const { id , value } = event.target;
-        setFormData({})
-    }
+        setFormData({ ...formData , [id] : value });
+    };
 
     const { companyusername } = useParams();
 
-    const handlePost = async () => {
+    const handlePost = async (event) => {
+        event.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:3000/api/postjob/${companyusername}` , {
-                JobName : name ,
-                Location : location ,
-                Position : position ,
-                Salary : salary ,
-                Description : description ,
+            await axios.post(`http://localhost:3000/api/postjob/${companyusername}` , formData , {
+                withCredentials : true ,
             });
-
-            if(response.data.succuss) {
-                console.log("Job Posted Success" , response.data.message);
-            } else {
-                console.error("Job posting failed:", response.data.message);
-            }
+            alert("Post Complete")
         } catch(error) {
             console.error("Error posting job:", error);
         }
@@ -48,23 +40,45 @@ function Postjob() {
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold ">
                     <label  className="block text-gray-700 text-sm font-semibold mb-2">Name</label>
-                    <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    <input 
+                        type="text" 
+                        id="JobName" 
+                        value={formData.JobName} 
+                        onChange={handleChange} 
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
                     <label htmlFor="location">Location:</label>
-                    <input type="text" id="location" value={location} onChange={(e) => setLocation(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                        <input type="text" 
+                        id="Location" 
+                        value={formData.Location} 
+                        onChange={handleChange} 
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
                     <label htmlFor="position">Position:</label>
-                    <input type="text" id="position" value={position} onChange={(e) => setPosition(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <input 
+                        type="text" 
+                        id="Position" 
+                        value={formData.Position} 
+                        onChange={handleChange} 
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
                     <label htmlFor="description">Description:</label>
-                    <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <textarea id="Description" 
+                        value={formData.Description} 
+                        onChange={handleChange} 
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
                     <label htmlFor="salary">Salary:</label>
-                    <textarea id="salary" value={salary} onChange={(e) => setSalary(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        <input 
+                        type = "number"
+                        id="Salary" 
+                        value={formData.Salary} 
+                        onChange={handleChange} 
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                 </div>
                 <button onClick={handlePost} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5">
                     Post

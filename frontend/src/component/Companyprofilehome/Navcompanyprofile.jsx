@@ -11,7 +11,7 @@ function Navcompanyprofile(){
                 <Link to ="/Companyprofile" className="text-gray-900  hover:text-blue-500 text-base">MYCOMPANY</Link>
                 <Link to = "/CompanyLogin" className="text-gray-900  hover:text-blue-500 text-base">LIST</Link>
                 <Link to="/Company" className="text-gray-900 hover:text-blue-500 text-base">LOGOUT</Link>
-                <Link to={"/Postjob"} className="text-gray-900 hover:text-blue-500 text-base">LOGOUT</Link>
+                <Link to="/Postjobpage/:companyusername" className="text-gray-900 hover:text-blue-500 text-base">LOGOUT</Link>
                 </ul>
             </div>
      </nav> 

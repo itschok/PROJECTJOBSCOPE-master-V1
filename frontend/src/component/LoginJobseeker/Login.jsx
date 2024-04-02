@@ -1,10 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link , useNavigate } from "react-router-dom";
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 function Login() {
     const [jobseekerIdentifier, setJobSeekerIdentifier] = useState("");
     const [password, setPassword] = useState("");
