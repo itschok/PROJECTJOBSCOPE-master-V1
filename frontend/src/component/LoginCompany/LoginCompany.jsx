@@ -18,7 +18,8 @@ function LoginCompany() {
             });
             console.log(response.data.message);
             if (response.data.success) {
-                navigate("/Companyhome");
+                const companyusername = response.data.companyusername;
+                navigate(`/Companyhome/${companyusername}`);
             } else {
                 setErrorMessage("Invalid username or password");
             }

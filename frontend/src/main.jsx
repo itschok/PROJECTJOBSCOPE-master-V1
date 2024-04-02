@@ -41,7 +41,7 @@ const router=createBrowserRouter([
     element:<CompanyRegis/>
   },
   {
-    path:"/Jobseekerhome",
+    path:"/Jobseekerhome/:jobseekerusername",
     element:<Jobseekerhome/>
   },
   {
@@ -57,7 +57,7 @@ const router=createBrowserRouter([
     element:<Myjobpage/>
   },
   {
-    path:"/Companyhome",
+    path:"/Companyhome/:companyusername",
     element:<Companyhomepage/>
   },
   {

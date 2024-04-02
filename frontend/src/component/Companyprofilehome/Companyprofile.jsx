@@ -1,5 +1,28 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function Companyprofile() {
+    const [user , setUser] = useState({});
+    const { companyusername } = useParams();
+
+    useEffect(() => {
+        fetchUserProfile();
+    }, [ companyusername ]);
+
+    async function fetchUserProfile() {
+        try {
+            const response = await axios.get(`http://localhost:3000/api/profile/companies/${companyusername}`, {
+                withCredentials: true,
+            });
+            const userData = response.data;
+            console.log(userData);
+            setUser(userData);
+        } catch (error) {
+            setUser(null);
+        }
+    }
+
     return (
         <>
             <div className='container mx-auto text-center py-5'>
@@ -15,6 +38,8 @@ function Companyprofile() {
                         <input
                             type="text"
                             id="CompanyName"
+                            value = {user.companyUsername || "-"}
+                            readOnly
                             className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                         />
                     </div>
@@ -23,6 +48,8 @@ function Companyprofile() {
                         <input
                             type="text"
                             id="Email"
+                            value = {user.companyEmail || "-"}
+                            readOnly
                             className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                         />
                     </div>
@@ -32,6 +59,8 @@ function Companyprofile() {
                     <input
                         type="text"
                         id="Location"
+                        value = {user.Location || "-"}
+                        readOnly
                         className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                     />
                 </div>
@@ -40,10 +69,14 @@ function Companyprofile() {
                     <input
                         type="text"
                         id="Industry"
+                        value = {user.Industy || "-"}
+                        readOnly
                         className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                     />
                 </div>
-
+                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Edit Profile
+                        </button>
             </div>
         </>
     );
