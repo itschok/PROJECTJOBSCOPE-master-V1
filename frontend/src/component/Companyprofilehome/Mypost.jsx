@@ -27,7 +27,7 @@ function Mypost() {
                 <td className="py-3 text-center align-middle">{job.Position}</td>
                 <td className="py-3 text-center align-middle">{job.Salary}</td>
                 <td className="py-3 text-center align-middle">
-                    <Link to={`/editjob/${job._id}`} className="text-blue-500 hover:text-blue-800 font-semibold">
+                    <Link to={`/${companyusername}/editjob/${job._id}`} className="text-blue-500 hover:text-blue-800 font-semibold">
                         Edit
                     </Link>
                 </td>
