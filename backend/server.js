@@ -404,6 +404,31 @@ function verifyToken(req , res , next) {
     }
 }
 
+//Api GetPostedJob
+app.get("/api/getPostedJob/:companyusername" , async (req , res) => {
+    const { companyusername } = req.params;
+    const client = new MongoClient(uri , { useNewUrlParser : true});
+    try{
+        await client.connect();
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+
+        const user = await collection.find({ companyUsername : companyusername }).toArray();
+        res.json({
+            success : true,
+            message : "Get PostedJob Success",
+            data : user ,
+        });
+    } catch (error) {
+        res.json({
+            success : false,
+            message : "Get PostedJob Failed",
+        });
+    } finally {
+        await client.close();
+    }
+});
+
 app.get("/jobseekerusers" , verifyToken , async (req , res) => {
     const client = new MongoClient(uri , { useUnifiedTopology : true});
     try {
