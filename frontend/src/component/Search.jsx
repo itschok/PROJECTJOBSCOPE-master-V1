@@ -38,11 +38,13 @@ function Search() {
                 <td>{job.Location}</td>
                 <td>{job.Position}</td>
                 <td>{job.Salary}</td>
+                <td>{job.Description}</td>
+                <button>Apply</button>
             </tr>
         ));
     };
 
-    // Get unique values for each criterion
+
     const jobNames = ["All", ...new Set(postedJobs.map(job => job.JobName))];
     const locations = ["All", ...new Set(postedJobs.map(job => job.Location))];
     const positions = ["All", ...new Set(postedJobs.map(job => job.Position))];
@@ -111,6 +113,8 @@ function Search() {
                             <th className="px-4 py-2">Location</th>
                             <th className="px-4 py-2">Position</th>
                             <th className="px-4 py-2">Salary</th>
+                            <th className="px-4 py-2">Description</th>
+                            <th className="px-4 py-2">Apply</th>
                         </tr>
                     </thead>
                     <tbody>
