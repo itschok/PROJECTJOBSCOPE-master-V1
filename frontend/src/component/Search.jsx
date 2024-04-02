@@ -1,17 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { useParams } from "react-router-dom";
 
 function Search() {
     const [searchTerm, setSearchTerm] = useState("");
     const [location, setLocation] = useState("");
-    
-    // Function to handle search
-    const handleSearch = () => {
-        // Perform search based on searchTerm and location
-        // Update UI with search results
-    }
+    const [postedJobs, setPostedJobs] = useState([]);
+    const { companyusername } = useParams();
+
+    useEffect(() => {
+        fetchPostedJobs();
+    }, [companyusername]);
+
+    const fetchPostedJobs = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3000/api/getPostedJob/${companyusername}`);
+            setPostedJobs(response.data.data);
+        } catch (error) {
+            console.error("Error fetching posted jobs:", error);
+        }
+    };
+
+    const renderPostedJobs = () => {
+        return postedJobs.map((job) => (
+            <tr key={job._id}>
+                <td>{job.JobName}</td>
+                <td>{job.Location}</td>
+                <td>{job.Position}</td>
+                <td>{job.Salary}</td>
+            </tr>
+        ));
+    };
 
     return (
-        <div className="py-16 flex justify-between ">
+        <div className="py-16 flex">
             <div className="bg-white border-orange-500 m-12 p-4 px-6 text-base border-2 rounded-3xl text-center">
                 <h1>SEARCH FOR</h1>
                 <input
@@ -35,20 +57,22 @@ function Search() {
                         <option value="location2">Location 2</option>
                         <option value="location3">Location 3</option>
                     </select>
-                    <div className="py-8 ">
-                        <button
-                            onClick={handleSearch}
-                            className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                        >
-                            Search
-                        </button>
-                    </div>
                 </div>
             </div>
-            <div className="border-2 rounded-3xl bg-white m-12 p-4 px-6 text-2xl relative flex justify-between">
-                <h1 className="text-5xl font-bold text-orange-500">Result</h1>
-                <p className="px-6 py-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti dolor omnis tenetur excepturi totam quae nemo unde necessitatibus nobis consequuntur vero voluptas, eaque eum. Non fugit provident doloribus ipsum debitis.</p>
-            
+            <div className="border-2 rounded-3xl bg-white m-12 p-4 px-6 text-2xl">
+                <table className="w-full table-auto">
+                    <thead>
+                        <tr>
+                            <th className="px-4 py-2">Job Name</th>
+                            <th className="px-4 py-2">Location</th>
+                            <th className="px-4 py-2">Position</th>
+                            <th className="px-4 py-2">Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {postedJobs.length > 0 ? renderPostedJobs() : <tr><td colSpan="5">No posted jobs</td></tr>}
+                    </tbody>
+                </table>
             </div>
         </div>
     );
