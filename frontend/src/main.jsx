@@ -40,7 +40,7 @@ const router=createBrowserRouter([
     element:<CompanyRegis/>
   },
   {
-    path:"/Jobseekerhome",
+    path:"/Jobseekerhome/:jobseekerusername",
     element:<Jobseekerhome/>
   },
   {
@@ -52,15 +52,15 @@ const router=createBrowserRouter([
     element:<Jobseekereidtprofile/>
   },
   {
-    path:"/Myjob",
+    path:"/Myjob/:jobseekerusername",
     element:<Myjobpage/>
   },
   {
-    path:"/Companyhome",
+    path:"/Companyhome/:companyusername",
     element:<Companyhomepage/>
   },
   {
-    path:"/Companyprofile",
+    path:"/Companyprofile/:companyusername",
     element:<Companyprofilepage/>
   }
 

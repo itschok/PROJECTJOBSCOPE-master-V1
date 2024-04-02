@@ -1,5 +1,5 @@
 import React from "react";
-import Navcompanyprofile from "../component/Companyprofilehome/Navcompany";
+import Navcompanyprofile from "../component/Companyprofilehome/Navcompanyprofile";
 import Companyhome from "../component/Companypage/Companyhome";
 function Companyhomepage(){
     return(

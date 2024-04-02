@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link , useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+
 function Login() {
     const [jobseekerIdentifier, setJobSeekerIdentifier] = useState("");
     const [password, setPassword] = useState("");
@@ -20,6 +22,7 @@ function Login() {
             if (response.data.success) {
                 const jobseekerusername = response.data.jobseekerusername;
                 navigate(`/Editprofile/${jobseekerusername}`);
+                Cookies.set('session_token', 'dummy_session_token', { expires: 1 }); // Expires in 1 day
             } else {
                 setErrorMessage("Invalid username or password");
             }
@@ -27,7 +30,7 @@ function Login() {
             console.error("Login error:", error.response.data.message);
             setErrorMessage(error.response.data.message);
         }
-
+        
     };
     return (
         <>
