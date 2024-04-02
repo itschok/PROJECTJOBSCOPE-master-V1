@@ -241,6 +241,70 @@ app.post("/companylogin" , async (req , res) => {
     }
 });
 
+//CompanyPostJob
+app.post('/api/postjob/:companyusername' , async (req , res) => {
+    const { companyusername  } = req.params;
+    const { JobName , ActionCommand , JobID , Location , Position , Salary , Description } = req.body;
+    let client;
+    try {
+        client = new MongoClient(uri , { useNewUrlParser : true});
+        await client.connect();
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+        if(ActionCommand === "create" ){
+            const result = await collection.insertOne({
+                companyUsername : companyusername ,
+                JobName : JobName ,
+                Location : Location ,
+                Position : Position ,
+                Salary : Salary ,
+                Description : Description ,
+            });
+            res.json({
+                success: true,
+                message: "Post Success" ,
+                JobID : result.insertedId,
+            });
+        }
+        else if(ActionCommand === "update") {
+            const filter = { _id : new ObjectId(JobID) };
+            const update = { $set : { JobName , Location , Position , Salary , Description }};
+            const result = await collection.updateOne(filter , update);
+            res.json({
+                success : true ,
+                message : "Update Success" ,
+                ObjectId : JobID,
+            })
+        } else if(ActionCommand === "delete") {
+            const result = await collection.deleteOne({ _id : new ObjectId(JobID) });
+            if (result.deletedCount === 1) {
+                res.json({
+                    success: true,
+                    message: "Delete Success"
+                });
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: "Job posting not found or not deleted"
+                });
+            }
+        } else {
+            res.status(400).json({
+                success : false ,
+                message : "Invalid Action" ,
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            success : false ,
+            message : "Post Failed" ,
+            error : error.message ,
+        })
+    } finally {
+        client.close();
+    }
+});
+
 //JobSeekerUsername Profile
 app.get('/api/profile/jobseeker/:jobseekerusername', async (req, res) => {
     const { jobseekerusername } = req.params;
