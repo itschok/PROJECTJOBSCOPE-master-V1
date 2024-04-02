@@ -33,7 +33,7 @@ function Navcompanyprofile(){
                 <Link to ={`/Companyprofile/${companyusername}`} className="text-gray-900  hover:text-blue-500 text-base">MYCOMPANY</Link>
                 <Link to = "/CompanyLogin" className="text-gray-900  hover:text-blue-500 text-base">LIST</Link>
                 <Link to="/Company" className="text-gray-900 hover:text-blue-500 text-base">LOGOUT</Link>
-                <Link tp="/Postjob" className="border-blue-500 texet-base">PostJob</Link>
+                <Link to={`/Postjobpage/${companyusername}`} className="border-blue-500 texet-base">PostJob</Link>
                 </ul>
             </div>
      </nav> 

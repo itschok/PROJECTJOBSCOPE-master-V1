@@ -15,7 +15,6 @@ import Myjobpage from './Pagess/Myjobpage'
 import Companyhomepage from './Pagess/Companyhomepage'
 import Companyprofilepage from './Pagess/Companyprofilepage'
 import Postjobpage from './Pagess/Postjob'
-import Tester from './Pagess/Tester'
 const router=createBrowserRouter([
   {
     path:"/",
@@ -66,7 +65,7 @@ const router=createBrowserRouter([
     element:<Companyprofilepage/>
   },
   {
-    path:"/Postjobpage",
+    path:"/Postjobpage/:companyusername",
     element:<Postjobpage/>
   }
 ])
