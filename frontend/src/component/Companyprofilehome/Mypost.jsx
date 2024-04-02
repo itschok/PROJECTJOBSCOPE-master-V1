@@ -22,11 +22,11 @@ function Mypost() {
     const renderPostedJobs = () => {
         return postedJobs.map((job) => (
             <tr key={job._id}>
-                <td>{job.JobName}</td>
-                <td>{job.Location}</td>
-                <td>{job.Position}</td>
-                <td>{job.Salary}</td>
-                <td>
+                <td className="py-3 text-center align-middle">{job.JobName}</td>
+                <td className="py-3 text-center align-middle">{job.Location}</td>
+                <td className="py-3 text-center align-middle">{job.Position}</td>
+                <td className="py-3 text-center align-middle">{job.Salary}</td>
+                <td className="py-3 text-center align-middle">
                     <Link to={`/editjob/${job._id}`} className="text-blue-500 hover:text-blue-800 font-semibold">
                         Edit
                     </Link>
