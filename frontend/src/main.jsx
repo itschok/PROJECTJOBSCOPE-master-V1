@@ -71,11 +71,11 @@ const router=createBrowserRouter([
     element:<Postjobpage/>
   },
   {
-    path:"/Mypostpage",
+    path:"/Mypostpage/:companyusername",
     element:<Mypostpage/>
   },
   {
-    path:"/Applicant",
+    path:"/Applicant/:companyusername",
     element:<Applicantpage/>
   }
 ])
