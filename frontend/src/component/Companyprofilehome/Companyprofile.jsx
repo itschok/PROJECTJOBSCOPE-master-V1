@@ -16,7 +16,6 @@ function Companyprofile() {
                 withCredentials: true,
             });
             const userData = response.data;
-            console.log(userData);
             setUser(userData);
         } catch (error) {
             setUser(null);

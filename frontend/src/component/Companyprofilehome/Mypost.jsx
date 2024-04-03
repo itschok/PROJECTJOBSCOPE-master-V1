@@ -14,7 +14,6 @@ function Mypost() {
         try {
             const response = await axios.get(`http://localhost:3000/api/getPostedJob/${companyusername}`);
             setPostedJobs(response.data.data);
-            console.log(postedJobs);
         } catch (error) {
             console.error("Error fetching posted jobs:", error);
         }
