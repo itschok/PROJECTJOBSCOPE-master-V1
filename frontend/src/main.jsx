@@ -82,7 +82,7 @@ const router=createBrowserRouter([
     element:<Applicantpage/>
   },
   {
-    path:"//Mypostpage/:companyusername/Editpost/:jobid",
+    path:"/Mypostpage/:companyusername/Editpost/:jobid",
     element:<Editcompanypage/>
   },
   {
@@ -90,7 +90,7 @@ const router=createBrowserRouter([
     element:<Editcompanyprofilepage/>
   },
   {
-    path:"/Tester",
+    path:"/ViewProfile/:jobseekerusername/:companyusername",
     element:<Viewcompanypage/>
   }
 ])
