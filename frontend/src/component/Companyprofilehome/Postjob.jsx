@@ -48,12 +48,24 @@ function Postjob() {
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
-                    <label htmlFor="location">Location:</label>
-                        <input type="text" 
-                        id="Location" 
-                        value={formData.Location} 
-                        onChange={handleChange} 
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <div>
+                        <label htmlFor="location">Location:</label>
+                        <select
+                            id="Location"
+                            value={formData.Location}
+                            onChange={handleChange}
+                            className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
+                        >
+                            <option value="">Select Location</option>
+                            <option value="Bangkok">Bangkok</option>
+                            <option value="County">County</option>
+                            <option value="North">North</option>
+                            <option value="Northeast">Northeast</option>
+                            <option value="East">East</option>
+                            <option value="West">West</option>
+                            <option value="South">South</option>
+                        </select>
+                    </div>
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
                     <label htmlFor="position">Position:</label>
