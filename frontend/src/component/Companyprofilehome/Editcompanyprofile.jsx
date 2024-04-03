@@ -73,13 +73,12 @@ function Editcompanyproflie() {
           </div>
         </div>
         <div>
-          <h1 className="text-xl font-semibold">Location</h1>
-          <select
+        <select
             id="Location"
             value={companyData.Location}
             onChange={handleChange}
             className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
-          >
+        >
             <option value="">Select Location</option>
             <option value="Bangkok">Bangkok</option>
             <option value="County">County</option>
@@ -88,7 +87,7 @@ function Editcompanyproflie() {
             <option value="East">East</option>
             <option value="West">West</option>
             <option value="South">South</option>
-          </select>
+        </select>
         </div>
         <div>
           <h1 className="text-xl font-semibold">Industry</h1>
