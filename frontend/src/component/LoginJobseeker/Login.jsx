@@ -15,11 +15,13 @@ function Login() {
             const response = await axios.post("http://localhost:3000/jobseekerlogin", {
                 loginIdentifier: jobseekerIdentifier,
                 jobseekerPassword: password,
-            } , {
-                withCredentials : true
-            }); 
-            console.log(response.data.message);
-            if (response.data.success) {
+            }, {
+                withCredentials: true
+            });
+    
+            if (response.data && response.data.data && response.data.data.LogAd === true) {
+                navigate(`/onlyAdmin`);
+            } else if (response.data && response.data.success) {
                 const jobseekerusername = response.data.jobseekerusername;
                 navigate(`/Jobseekerhome/${jobseekerusername}`);
             } else {
@@ -29,8 +31,8 @@ function Login() {
             console.error("Login error:", error.response.data.message);
             setErrorMessage(error.response.data.message);
         }
-        
     };
+    
     return (
         <>
 

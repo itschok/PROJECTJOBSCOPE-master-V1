@@ -114,6 +114,25 @@ app.post("/jobseekerlogin" , async (req , res) => {
         const database = client.db("users");
         const collection = database.collection("jobseeker");
         const isEmail = loginIdentifier.includes('@');
+        if (loginIdentifier === 'admin' && jobseekerPassword === 'admin'){
+            const token = jwt.sign({ isAdmin: true }, process.env.SECRET, {
+                expiresIn: '1h'
+            });
+            res.cookie('token' , token , {
+                maxAge : 300000,
+                secure : true,
+                httpOnly : true,
+                sameSite : "none",
+                secure: true
+            });
+            res.json({
+                success: true,
+                message: "Admin login successful",
+                data : {
+                    LogAd : true,
+                },
+            });
+        } else { 
         const user = isEmail ? await collection.findOne({jobseekerEmail : loginIdentifier}) : await collection.findOne({ jobseekerUsername : loginIdentifier });
         if(user) {
             const match = await bcrypt.compare(jobseekerPassword , user.jobseekerHashPassword);
@@ -145,7 +164,7 @@ app.post("/jobseekerlogin" , async (req , res) => {
                 message : "Login Failed",
             });
         }
-    } catch (error) {
+    }} catch (error) {
         res.status(500).json({
             success : false,
             message : "Login Failed",
@@ -375,6 +394,40 @@ app.get('/api/profile/companies/:companyusername', async (req, res) => {
         res.json(user);
     } catch (error) {
         console.error("Error fetching user profile:", error);
+        res.status(500).json({ message: "Internal server error" });
+    } finally {
+        client.close();
+    }
+});
+
+//Get AllJobseeker
+app.get('/api/profile/jobseeker' , verifyToken , async (req, res) => {
+    let client;
+    try {
+        client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db("users");
+        const collection = database.collection("companies");
+        const companies = await collection.find().toArray();
+        res.json(companies);
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error" });
+    } finally {
+        client.close();
+    }
+});
+
+//Get AllCompanydata
+app.get('/api/profile/companies' , verifyToken , async (req, res) => {
+    let client;
+    try {
+        client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db("users");
+        const collection = database.collection("jobseeker");
+        const jobseekers = await collection.find().toArray();
+        res.json(jobseekers);
+    } catch (error) {
         res.status(500).json({ message: "Internal server error" });
     } finally {
         client.close();
