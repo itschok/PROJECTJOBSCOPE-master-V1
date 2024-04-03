@@ -401,13 +401,13 @@ app.get('/api/profile/companies/:companyusername', async (req, res) => {
 });
 
 //Get AllJobseeker
-app.get('/api/profile/jobseeker' , verifyToken , async (req, res) => {
+app.get('/api/profile/jobseeker' , async (req, res) => {
     let client;
     try {
         client = new MongoClient(uri, { useNewUrlParser: true });
         await client.connect();
         const database = client.db("users");
-        const collection = database.collection("companies");
+        const collection = database.collection("jobseeker");
         const companies = await collection.find().toArray();
         res.json(companies);
     } catch (error) {
@@ -418,13 +418,13 @@ app.get('/api/profile/jobseeker' , verifyToken , async (req, res) => {
 });
 
 //Get AllCompanydata
-app.get('/api/profile/companies' , verifyToken , async (req, res) => {
+app.get('/api/profile/companies' , async (req, res) => {
     let client;
     try {
         client = new MongoClient(uri, { useNewUrlParser: true });
         await client.connect();
         const database = client.db("users");
-        const collection = database.collection("jobseeker");
+        const collection = database.collection("companies");
         const jobseekers = await collection.find().toArray();
         res.json(jobseekers);
     } catch (error) {
