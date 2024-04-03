@@ -40,6 +40,7 @@ function Applicant() {
         <td className="py-3 text-center align-middle">{applicant.Location}</td>
         <td className="py-3 text-center align-middle">{applicant.JobseekerEducationLevel}</td>
         <td className="py-3 text-center align-middle">{applicant.JobseekerEmail}</td>
+        <td className="py-3 text-center align-middle">{applicant.Status}</td>
         <td className="py-3 text-center align-middle">
           <button onClick={() => handleAction(applicant.Jobid, "Accept" , applicant.JobseekerUsername)} className="text-green-500 hover:text-green-800 font-semibold mr-4">
             Accept
@@ -64,6 +65,7 @@ function Applicant() {
               <th className="px-4 py-2">Location</th>
               <th className="px-4 py-2">Education Level</th>
               <th className="px-4 py-2">Email</th>
+              <th className="px-4 py-2">Status</th>
               <th className="px-4 py-2">Actions</th>
             </tr>
           </thead>
