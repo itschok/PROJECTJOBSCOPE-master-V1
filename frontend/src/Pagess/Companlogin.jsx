@@ -1,4 +1,3 @@
-import React from "react";
 import LoginCompany from "../component/LoginCompany/LoginCompany";
 import NavLoginC from "../component/LoginCompany/NavloginC";
 

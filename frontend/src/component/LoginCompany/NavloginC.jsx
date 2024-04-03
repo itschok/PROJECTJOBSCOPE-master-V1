@@ -1,4 +1,3 @@
-import React, { useState }  from "react";
 import { Link } from "react-router-dom";
 function NavLoginC(){
     return(
@@ -11,7 +10,7 @@ function NavLoginC(){
                 <Link to ="/Login" className="text-gray-900 hover:text-blue-500 text-base">FOR JOBSEEKER</Link>
                 </ul>
         </div>
-     </nav> 
+    </nav> 
     )
 }
 export default NavLoginC

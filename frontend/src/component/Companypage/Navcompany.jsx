@@ -10,7 +10,6 @@ function Navcompany(){
     <nav className="p-4">
         <div className="flex item-center space-x-10 justify-center">
             <div className="text-3xl font-black text-blue-500 "><Link to="/Company">JobScope</Link></div>
-            {/*toggle menu button*/}
             <div className="md:hidden">
                 <button id="menu-toggle"className="text-white"onClick={toggleMenu}>
                     <svg 
@@ -44,7 +43,6 @@ function Navcompany(){
                 <li><a href="#" className="text-white font-bold hover:text-blue-500">FOR COMPANY</a></li>
             </ul>
         ): null }
- 
     </nav>
     )
 }

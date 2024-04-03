@@ -18,13 +18,13 @@ function CompanyRegister() {
         }
         try {
             const response = await axios.post("http://localhost:3000/companyregister", {
-                companyUsername, // ใช้ companyName แทน username
-                companyEmail, // ใช้ companyEmail แทน email
-                companyPassword, // ใช้ companyPassword แทน password
+                companyUsername,
+                companyEmail,
+                companyPassword,
             });
             console.log(response.data.message);
             if (response.data.success) {
-                navigate("/CompanyLogin"); //To Home Page 
+                navigate("/CompanyLogin");
             } else {
                 setErrorMessage("Registration failed");
             }

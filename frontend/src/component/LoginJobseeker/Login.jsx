@@ -53,7 +53,6 @@ function Login() {
                     <button type="submit" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Sign In
                     </button>
-                    {/* Add links for registration or password reset */}
                     <Link to="/Register" className="inline-block align-baseline text-sm text-orange-500 hover:text-orange-800 font-semibold">
                         Register
                     </Link>

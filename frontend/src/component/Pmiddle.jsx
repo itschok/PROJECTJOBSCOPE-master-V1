@@ -1,4 +1,3 @@
-import React from "react"
 function Pmiddle(){
     return(
         <div className="py-16 bg-orange-100">
@@ -9,7 +8,5 @@ function Pmiddle(){
             </div>
         </div>
     )
-    
-    
 }
 export default Pmiddle

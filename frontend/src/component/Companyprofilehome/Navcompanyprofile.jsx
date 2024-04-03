@@ -17,7 +17,7 @@ function Navcompanyprofile(){
                 <Link to="/Company" className="text-gray-900 hover:text-blue-500 text-base">LOGOUT</Link>
                 </ul>
             </div>
-     </nav> 
+    </nav> 
     )
 
 }

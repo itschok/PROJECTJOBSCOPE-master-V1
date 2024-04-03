@@ -1,4 +1,3 @@
-import React from "react";
 import NavLogin from "../component/LoginJobseeker/NavLogin";
 import Register from "../component/RegisterJobseeker/Register";
 function Registerpage(){

@@ -1,4 +1,3 @@
-import React from "react";
 function CTA(){
     return(
         <section className="bg-orange-100 py-16 ">

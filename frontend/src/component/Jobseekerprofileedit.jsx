@@ -63,15 +63,14 @@ function Jobseekerprofileedit() {
                         />
                     </div>
                     <div className="py-3">
-                        <h1>Status</h1>
-                        <select
+                        <h1>Job</h1>
+                        <input
+                            type="text"
                             id="Job"
                             value={formData.Job}
                             onChange={handleChange}
                             className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl">
-                            <option value="Unemployed">Unemployed</option>
-                            <option value="Employed">Employed</option>
-                        </select>
+                        </input>
                     </div>
                     <div className="py-2">
                         <h1>Level of education</h1>
@@ -80,6 +79,7 @@ function Jobseekerprofileedit() {
                             value={formData.EducationLevel}
                             onChange={handleChange}
                             className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl">
+                            <option value="-">-</option>
                             <option value="High School">High School</option>
                             <option value="Bachelor’s Degree">Bachelor’s Degree</option>
                             <option value="Master’s Degree">Master’s Degree</option>

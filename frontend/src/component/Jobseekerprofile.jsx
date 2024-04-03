@@ -46,16 +46,6 @@ function Jobseekerprofile() {
                         readOnly
                         className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
                     />
-                <div className="py-3">
-                    <h1>Status</h1>
-                    <input
-                        type="text"
-                        id="Status"
-                        value = {user.Status || ""}
-                        readOnly
-                        className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl "
-                    />
-                </div>
                 <div className="py-2">
                     <h1>Level of education</h1>
                     <input

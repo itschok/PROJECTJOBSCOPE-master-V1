@@ -23,7 +23,6 @@ function LeftMenu() {
         }
     }
 
-
     const handleEditProfileClick = () => {
         navigate(`/Editprofile/${jobseekerusername}`);
     };

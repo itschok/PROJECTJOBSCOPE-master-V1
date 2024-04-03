@@ -1,4 +1,3 @@
-import React from "react";
 import Navcompanyprofile from "../component/Companyprofilehome/Navcompanyprofile";
 import Companyprofile from "../component/Companyprofilehome/Companyprofile";
 function Companyprofilepage(){
