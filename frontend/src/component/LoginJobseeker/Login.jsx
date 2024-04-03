@@ -21,8 +21,7 @@ function Login() {
             console.log(response.data.message);
             if (response.data.success) {
                 const jobseekerusername = response.data.jobseekerusername;
-                navigate(`/Editprofile/${jobseekerusername}`);
-                Cookies.set('session_token', 'dummy_session_token', { expires: 1 }); // Expires in 1 day
+                navigate(`/Jobseekerhome/${jobseekerusername}`);
             } else {
                 setErrorMessage("Invalid username or password");
             }

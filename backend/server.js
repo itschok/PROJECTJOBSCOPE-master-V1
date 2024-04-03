@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const {MongoClient , GridFSBucket , ObjectId} =require("mongodb");
+const {MongoClient , ObjectId , GridFSBucket} =require("mongodb");
 const dotenv = require("dotenv");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -244,7 +244,7 @@ app.post("/companylogin" , async (req , res) => {
 
 //CompanyPostJob
 app.post('/api/postjob/:companyusername' , async (req , res) => {
-    const { companyusername  } = req.params;
+    const { companyusername } = req.params;
     const { JobName , ActionCommand , JobID , Location , Position , Salary , Description } = req.body;
     let client;
     try {
@@ -266,16 +266,6 @@ app.post('/api/postjob/:companyusername' , async (req , res) => {
                 message: "Post Success" ,
                 JobID : result.insertedId,
             });
-        }
-        else if(ActionCommand === "update") {
-            const filter = { _id : new ObjectId(JobID) };
-            const update = { $set : { JobName , Location , Position , Salary , Description }};
-            const result = await collection.updateOne(filter , update);
-            res.json({
-                success : true ,
-                message : "Update Success" ,
-                ObjectId : JobID,
-            })
         } else if(ActionCommand === "delete") {
             const result = await collection.deleteOne({ _id : new ObjectId(JobID) });
             if (result.deletedCount === 1) {
@@ -303,6 +293,44 @@ app.post('/api/postjob/:companyusername' , async (req , res) => {
         })
     } finally {
         client.close();
+    }
+});
+
+//Edit postjob
+app.post('/api/editpostjob/:jobid' , async (req , res) => {
+    const { jobid } = req.params;
+    const { JobName , Location , Position , Salary , Description } = req.body;
+    let client;
+    try {
+        client = new MongoClient(uri , { useNewUrlParser : true});
+        await client.connect();
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+
+        const updatedJob = {
+            $set: {
+                JobName: JobName,
+                Location: Location,
+                Position: Position,
+                Salary: Salary,
+                Description: Description
+            }
+        };
+
+        const result = await collection.updateOne({ _id: new ObjectId(jobid) }, updatedJob);
+        
+        if (result.matchedCount === 1) {
+            res.status(200).json({ message: 'Job updated successfully.' });
+        } else {
+            res.status(404).json({ message: 'Job not found.' });
+        }
+    } catch (error) {
+        console.error("Error editing job:", error);
+        res.status(500).json({ message: 'Internal server error.' });
+    } finally {
+        if (client) {
+            client.close();
+        }
     }
 });
 

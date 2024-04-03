@@ -1,118 +1,130 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams , useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function EditPostjob() {
-    const [formData , setFormData] = useState({
-        ActionCommand : "update" ,
+    const [formData, setFormData] = useState({
         JobName : "" ,
         Location : "" ,
         Position : "" ,
-        Salary : "" , 
+        Salary : 0.0 ,
         Description : "" ,
     });
 
-    const { companyusername, jobid } = useParams();
+    const { companyusername , jobid } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchJobData = async () => {
+        const fetchJobDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/getjob/${companyusername}`, {
-                    withCredentials: true,
-                });
-                const { job } = response.data;
-                setFormData({
-                    ...formData,
-                    JobName: job.JobName,
-                    Location: job.Location,
-                    Position: job.Position,
-                    Salary: job.Salary,
-                    Description: job.Description,
-                });
+                
+                const response = await axios.get(`http://localhost:3000/api/getPostedJob/${companyusername}`);
+                const job = response.data.data.find(job => job._id === jobid);
+                if (job) {
+                    setFormData({
+                        JobName: job.JobName,
+                        Location: job.Location,
+                        Position: job.Position,
+                        Salary: parseFloat(job.Salary),
+                        Description: job.Description
+                    });
+                }
             } catch (error) {
-                console.error("Error fetching job data:", error);
+                console.error("Error fetching job details:", error);
             }
         };
-        
-        fetchJobData();
-    }, [companyusername, jobid, formData]);
+        fetchJobDetails();
+    }, [companyusername, jobid]);
 
     const handleChange = (event) => {
         const { id, value } = event.target;
         setFormData({ ...formData, [id]: value });
     };
 
-    const handleEdit = async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.pull(`http://localhost:3000/api/editjob/${companyusername}`, formData, {
+            await axios.post(`http://localhost:3000/api/editpostjob/${jobid}`, { 
+                ...formData , 
+                Salary : parseFloat(formData.Salary)
+            } , 
+            {
                 withCredentials: true,
             });
-            alert("Edit Complete");
-        } catch(error) {
+            navigate(`/Mypostpage/${companyusername}`);
+        } catch (error) {
             console.error("Error editing job:", error);
         }
     };
 
     return (
-        <div className='container mx-auto text-center py-5 '>
-            <form>
+        <div className="container mx-auto text-center py-5 ">
+            <form onSubmit={handleSubmit}>
                 <div className="font-semibold py-4">Edit CompanyProfile</div>
                 <div className="mt-5 py-5 text-sm font-semibold ">
                     <label className="block text-gray-700 text-sm font-semibold mb-2">ID</label>
-                    <input 
-                        type="text" 
-                        id="Idjob" 
-                        value={""} 
-                        onChange={""} 
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    <input
+                        type="text"
+                        id="Idjob"
+                        value={jobid}
+                        readOnly
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold ">
                     <label className="block text-gray-700 text-sm font-semibold mb-2">Name</label>
-                    <input 
-                        type="text" 
-                        id="JobName" 
-                        value={formData.JobName} 
-                        onChange={handleChange} 
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    <input
+                        type="text"
+                        id="JobName"
+                        value={formData.JobName}
+                        onChange={handleChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
                     <label htmlFor="location">Location:</label>
-                    <input 
-                        type="text" 
-                        id="Location" 
-                        value={formData.Location} 
-                        onChange={handleChange} 
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                    <input
+                        type="text"
+                        id="Location"
+                        value={formData.Location}
+                        onChange={handleChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
                     <label htmlFor="position">Position:</label>
-                    <input 
-                        type="text" 
-                        id="Position" 
-                        value={formData.Position} 
-                        onChange={handleChange} 
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                    <input
+                        type="text"
+                        id="Position"
+                        value={formData.Position}
+                        onChange={handleChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
                     <label htmlFor="description">Description:</label>
-                    <textarea 
-                        id="Description" 
-                        value={formData.Description} 
-                        onChange={handleChange} 
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                    <textarea
+                        id="Description"
+                        value={formData.Description}
+                        onChange={handleChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
                 </div>
                 <div className="mt-5 py-5 text-sm font-semibold">
                     <label htmlFor="salary">Salary:</label>
-                    <input 
+                    <input
                         type="number"
-                        id="Salary" 
-                        value={formData.Salary} 
-                        onChange={handleChange} 
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        id="Salary"
+                        value={formData.Salary}
+                        onChange={handleChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
                 </div>
-                <button onClick={handleEdit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5">
-                    Edit
+                <button
+                    type="submit"
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full"
+                >
+                    SAVE
                 </button>
             </form>
         </div>

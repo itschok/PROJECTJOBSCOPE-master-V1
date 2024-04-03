@@ -29,12 +29,12 @@ function Mypost() {
                 <td className="py-3 text-center align-middle">{job.Salary}</td>
                 <td className="py-3 text-center align-middle">{job.Description}</td>
                 <td className="py-3 text-center align-middle">
-                    <Link to={`/${companyusername}/editjob/${job._id}`} className="text-blue-500 hover:text-blue-800 font-semibold">
+                    <Link to={`/Mypostpage/${companyusername}/Editpost/${job._id}`} className="text-blue-500 hover:text-blue-800 font-semibold">
                         Edit
                     </Link>
                 </td>
             </tr>
-        ));
+        )); 
     };
 
     return (
