@@ -75,7 +75,7 @@ const router=createBrowserRouter([
     element:<Mypostpage/>
   },
   {
-    path:"/Applicant:companyusername",
+    path:"/Applicant/:companyusername",
     element:<Applicantpage/>
   }
 ])
