@@ -262,7 +262,7 @@ app.post('/api/postjob/:companyusername' , async (req , res) => {
 });
 
 //Edit CompanyProfile
-app.post('/api/profile/companies/:companyusername/update' , verifyToken , async (req , res) => {
+app.post(`/api/profile/companies/:companyusername/update` , async (req , res) => {
     const { companyusername } = req.params;
     const { CompanyName , CompanyEmail , Location , Industry } = req.body;
     let client
@@ -654,7 +654,7 @@ app.post("/api/applicant/:jobseekerusername/:jobid", async (req, res) => {
         console.error("Error updating status:", error);
         res.status(500).json({ error: "Internal server error" });
     } finally {
-        client.close(); // Close the client connection
+        client.close();
     }
 });
 
