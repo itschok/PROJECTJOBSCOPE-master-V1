@@ -28,7 +28,7 @@ function Editcompanyproflie(){
                     <img className="rounded-full border border-gray-500" src="https://cdn0.iconfinder.com/data/icons/business-1390/24/20_-_Company-2-256.png" alt="Company icon" width={200} />
                 </div>
                 <div className="py-4">
-                    <h1 className="text-3xl font-bold">Company Information</h1>
+                    <h1 className="text-3xl font-bold">Edit Company Information</h1>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>

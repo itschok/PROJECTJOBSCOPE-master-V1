@@ -85,7 +85,7 @@ const router=createBrowserRouter([
     element:<Editcompanypage/>
   },
   {
-    path:"/tester",
+    path:"/Editcompanyprofile/:companyusername",
     element:<Editcompanyprofilepage/>
   }
 ])

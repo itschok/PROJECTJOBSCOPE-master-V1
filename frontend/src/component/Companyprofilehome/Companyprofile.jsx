@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Companyprofile() {
-    const [user , setUser] = useState({});
+    const [user, setUser] = useState({});
     const { companyusername } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUserProfile();
-    }, [ companyusername ]);
+    }, [companyusername]);
 
     async function fetchUserProfile() {
         try {
@@ -21,6 +22,15 @@ function Companyprofile() {
             setUser(null);
         }
     }
+
+    const handlePress = async (event) => {
+        event.preventDefault();
+        try {
+            navigate(`/Editcompanyprofile/${companyusername}`); // Fix: Use backticks and pass the actual value of companyusername
+        } catch (error) {
+            console.error("error");
+        }
+    };
 
     return (
         <>
@@ -37,7 +47,7 @@ function Companyprofile() {
                         <input
                             type="text"
                             id="CompanyName"
-                            value = {user.CompanyName || "-"}
+                            value={user.CompanyName || "-"}
                             readOnly
                             className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                         />
@@ -47,7 +57,7 @@ function Companyprofile() {
                         <input
                             type="text"
                             id="Email"
-                            value = {user.CompanyEmail || "-"}
+                            value={user.CompanyEmail || "-"}
                             readOnly
                             className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                         />
@@ -58,7 +68,7 @@ function Companyprofile() {
                     <input
                         type="text"
                         id="Location"
-                        value = {user.Location || "-"}
+                        value={user.Location || "-"}
                         readOnly
                         className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                     />
@@ -68,14 +78,14 @@ function Companyprofile() {
                     <input
                         type="text"
                         id="Industry"
-                        value = {user.Industry || "-"}
+                        value={user.Industry || "-"}
                         readOnly
                         className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                     />
                 </div>
-                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Edit Profile
-                        </button>
+                <button type="submit" onClick={handlePress} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Edit Profile
+                </button>
             </div>
         </>
     );
