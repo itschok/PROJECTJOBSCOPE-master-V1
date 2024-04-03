@@ -261,6 +261,34 @@ app.post('/api/postjob/:companyusername' , async (req , res) => {
     }
 });
 
+//Edit CompanyProfile
+app.post('/api/profile/companies/:companyusername/update' , verifyToken , async (req , res) => {
+    const { companyusername } = req.params;
+    const { CompanyName , CompanyEmail , Location , Industry } = req.body;
+    let client
+
+    try {
+        client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db("users");
+        const collection = database.collection("companies");
+
+        const filter = { companyUsername : companyusername };
+        const update = { $set: { CompanyName , CompanyEmail, Location , Industry } };
+
+        const result = await collection.updateOne(filter, update);
+
+        if (result.modifiedCount === 1) {
+            res.json({ success: true, message: "Profile updated successfully" });
+        } else {
+            res.status(404).json({ success: false, message: "User not found or profile not updated" });
+        }
+    } catch (error) {
+        console.error("Error updating user profile:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    } 
+});
+
 //Edit postjob
 app.post('/api/editpostjob/:jobid' , async (req , res) => {
     const { jobid } = req.params;

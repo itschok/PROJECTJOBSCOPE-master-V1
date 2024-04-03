@@ -37,7 +37,7 @@ function Companyprofile() {
                         <input
                             type="text"
                             id="CompanyName"
-                            value = {user.companyUsername || "-"}
+                            value = {user.CompanyName || "-"}
                             readOnly
                             className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                         />
@@ -47,7 +47,7 @@ function Companyprofile() {
                         <input
                             type="text"
                             id="Email"
-                            value = {user.companyEmail || "-"}
+                            value = {user.CompanyEmail || "-"}
                             readOnly
                             className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                         />
@@ -68,7 +68,7 @@ function Companyprofile() {
                     <input
                         type="text"
                         id="Industry"
-                        value = {user.Industy || "-"}
+                        value = {user.Industry || "-"}
                         readOnly
                         className="m-3 py-2 px-4 bg-gray-200 border border-gray-400 rounded-lg w-full focus:outline-none focus:bg-white"
                     />
