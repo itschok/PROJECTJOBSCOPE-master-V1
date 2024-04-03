@@ -26,8 +26,10 @@ function Search() {
 
     const applyForJob = async (jobid) => {
         try {
-            const response = await axios.post(`http://localhost:3000/api/AddToApplicant/${jobseekerusername}/${jobid}`);
-            console.log(response.data.message);
+            console.log("Applying for job:", jobid);
+            console.log("Job seeker username:", jobseekerusername);
+            await axios.post(`http://localhost:3000/api/AddToApplicant/${jobseekerusername}/${jobid}`);
+            console.log("Job application successful");
             fetchPostedJobs();
         } catch (error) {
             console.error("Error applying for job:", error);

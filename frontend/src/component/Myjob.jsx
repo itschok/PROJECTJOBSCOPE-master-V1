@@ -13,7 +13,7 @@ function Myjob(){
     const fetchPostedJobs = async () => {
         try {
             const response = await axios.get(`http://localhost:3000/api/myjob/${jobseekerusername}`);
-            setMyJob(response.data.data);
+            setMyJob(response.data);
         } catch (error) {
             console.error("Error fetching MyJob:", error);
         }
