@@ -511,6 +511,8 @@ app.post('/api/AddToApplicant/:jobseekerusername/:jobid', async (req, res) => {
         const takecollection = takedb.collection("jobseeker");
         const database = client.db("postedjob");
         const collection = database.collection("postedjob");
+        const storedatabase = client.db("Job");
+        const storecollection = storedatabase.collection("Job");
 
         const jobseeker = await takecollection.findOne({ jobseekerUsername: jobseekerusername });
         if (!jobseeker) {
@@ -522,29 +524,43 @@ app.post('/api/AddToApplicant/:jobseekerusername/:jobid', async (req, res) => {
             return res.status(404).json({ message: 'Job not found' });
         }
 
-        // Check if the jobseekerusername already exists in the array
-        if (postedJob.JobseekerUsername && postedJob.JobseekerUsername.includes(jobseeker.jobseekerUsername)) {
-            return res.status(400).json({ message: 'Job seeker already added' });
+        // Check if the job seeker has already applied for this job
+        const existingApplication = await storecollection.findOne({ Jobid: new ObjectId(jobid), JobseekerUsername: jobseeker.jobseekerUsername });
+        if (existingApplication) {
+            return res.status(400).json({ message: 'Job seeker has already applied for this job' });
         }
-
-        const result = await collection.updateOne(
-            { _id: new ObjectId(jobid) },
-            { $push :  { 
-                JobseekerUsername : jobseeker.jobseekerUsername ,
-                Status : "None",
-            }}
-        );
-
-        if (result.modifiedCount === 1) {
-            res.status(200).json({ message: 'Job seeker added successfully' });
-        } else {
-            res.status(500).json({ message: 'Failed to add job seeker' });
-        }
+        
+        const postedJobId = postedJob._id;
+        const companyUsername = postedJob.companyUsername;
+        const Location = postedJob.Location;
+        const Position = postedJob.Position;
+        const JobName = postedJob.JobName;
+        const Salary = postedJob.Salary;
+        const Description = postedJob.Description;
+        
+        await storecollection.insertOne({
+            Jobid : new ObjectId(postedJobId),
+            companyUsername: companyUsername,
+            JobseekerUsername : jobseeker.jobseekerUsername,
+            JobseekerName : jobseeker.Name,
+            JobseekerEducationLevel : jobseeker.EducationLevel,
+            JobseekerEmail : jobseeker.Email,
+            JobName : JobName,
+            Location: Location,
+            Position: Position,
+            Salary : Salary,
+            Description : Description,
+            Status : "None",
+        });
+        
+        res.status(201).json({ success: true, message: 'Job seeker added successfully' });
     } catch (error) {
         console.error('Error adding job seeker:', error);
         res.status(500).json({ error: 'Internal server error' });
     } finally {
-        client.close();
+        if (client) {
+            client.close();
+        }
     }
 });
 
@@ -555,72 +571,14 @@ app.get("/api/getApplicant/:companyusername", async (req, res) => {
 
     try {
         await client.connect();
-        const database = client.db("postedjob");
-        const collection = database.collection("postedjob");
-
+        const database = client.db("Job");
+        const collection = database.collection("Job");
         const jobs = await collection.find({ companyUsername: companyusername }).toArray();
-        if (jobs.length > 0) {
-            const jobseekerUsernames = jobs.map(job => job.JobseekerUsername).flat();
-
-            const usersDB = client.db("users");
-            const jobseekerCollection = usersDB.collection("jobseeker");
-            const jobseekers = await jobseekerCollection.find({ jobseekerUsername: { $in: jobseekerUsernames } }).toArray();
-
-            const data = jobseekers.map(jobseeker => ({
-                Name: jobseeker.Name,
-                Email: jobseeker.Email,
-                EducationLevel: jobseeker.EducationLevel ,
-                Position: jobs.find(job => job.JobseekerUsername.includes(jobseeker.jobseekerUsername)).Position,
-                Location: jobs.find(job => job.JobseekerUsername.includes(jobseeker.jobseekerUsername)).Location
-            }));
-
-            res.json({
-                success: true,
-                message: "Get users successful",
-                data: data,
-            });
-        } else {
-            res.json({
-                success: false,
-                message: "No users found for the provided company username",
-            });
-        }
-    } catch (error) {
-        console.error('Error retrieving job seekers:', error);
         res.json({
-            success: false,
-            message: "Get users failed",
-        });
-    } finally {
-        await client.close();
-    }
-});
-
-//Get Myjob
-app.get("/api/myjob/:jobseekerusername" , async (req , res) => {
-    const { jobseekerusername } = req.params;
-    const client = new MongoClient(uri , { useUnifiedTopology : true});
-    try {
-        await client.connect();
-        const database = client.db("postedjob");
-        const collection = database.collection("postedjob");
-
-        const jobs = await collection.find({ JobseekerUsername: jobseekerusername }).toArray();
-        const formattedJobs = jobs.map(job => ({
-            companyUsername: job.companyUsername,
-            JobName: job.JobName,
-            Location: job.Location,
-            Position: job.Position,
-            Salary: job.Salary,
-            Description: job.Description,
-            Status : job.Status, 
-        }));
-
-        res.json({
-            success: true,
-            message: "Get user's jobs successful",
-            data: formattedJobs,
-        });
+            success : true ,
+            message : "Got",
+            data : jobs,
+        })
     } catch (error) {
         console.error("Error retrieving user's jobs:", error);
         res.json({
@@ -632,59 +590,70 @@ app.get("/api/myjob/:jobseekerusername" , async (req , res) => {
     }
 });
 
-//Accept and Denied
-app.post("/api/applicant/:jobseekerusername/:jobid", async (req, res) => {
-    const jobseekerusername = req.params.jobseekerusername;
-    const jobid = req.params.jobid;
-    const { ActionCommand } = req.body;
+//Get Myjob
+app.get('/api/myjob/:jobseekerusername', async (req, res) => {
+    const { jobseekerusername } = req.params;
+    let client;
 
     try {
-        const client = new MongoClient(uri, { useNewUrlParser: true });
+        client = new MongoClient(uri, { useUnifiedTopology: true });
         await client.connect();
-        const database = client.db("postedjob");
-        const collection = database.collection("postedjob");
 
-        const postedJob = await collection.findOne({ _id: new ObjectId(jobid) });
+        const database = client.db("Job");
+        const collection = database.collection("Job");
+        const jobs = await collection.find({ JobseekerUsername: jobseekerusername }).toArray();
 
-        if (!postedJob) {
-            return res.status(404).json({ message: "Job not found" });
+        if (!jobs || jobs.length === 0) {
+            return res.status(404).json({ message: "No jobs found for the provided jobseeker username" });
         }
 
-        const index = postedJob.JobseekerUsername.findIndex(applicant => applicant === jobseekerusername);
-
-        if (index === -1) {
-            return res.status(404).json({ message: "Job seeker not found in applicants list" });
+        res.json(jobs);
+    } catch (error) {
+        console.error('Error finding jobs:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    } finally {
+        if (client) {
+            client.close();
         }
+    }
+});
 
-        // Ensure Status field exists in each JobseekerUsername element
-        if (!postedJob.Status) {
-            // Initialize an empty array for Status if it doesn't exist
-            postedJob.Status = [];
-        }
+//Accept and Denied
+app.post("/api/applicant/:jobseekerusername/:jobid", async (req, res) => {
+    const { jobseekerusername , jobid } = req.params;
+    const { ActionCommand } = req.body;
+    let client
+    try {
+        client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db("Job");
+        const collection = database.collection("Job");
 
-        // Ensure the Status array has the same length as JobseekerUsername array
-        while (postedJob.Status.length < postedJob.JobseekerUsername.length) {
-            postedJob.Status.push("None"); // Initialize statuses to "None" for new applicants
-        }
+        let filter = {
+            _id : new ObjectId(jobid),
+            JobseekerUsername : jobseekerusername
+        };
 
-        const updateQuery = {};
         if (ActionCommand === "Accept") {
-            updateQuery.$set = { ["Status." + index]: "Accepted" };
-        } else if (ActionCommand === "Denied") {
-            updateQuery.$set = { ["Status." + index]: "Denied" };
+            await collection.updateOne(
+                filter ,
+                { $set: { "Status": "Accepted" } }
+            );
+
+        } else if (ActionCommand === "Deny") {
+            await collection.updateOne(
+                filter ,
+                { $set: { "Status": "Denied" } }
+            );
+
         } else {
-            return res.status(400).json({ message: "Invalid action command" });
+            res.status(400).json({ message: "Invalid action command" });
         }
-
-        const result = await collection.updateOne(
-            { _id: new ObjectId(jobid) },
-            updateQuery
-        );
-
-        res.json(result);
     } catch (error) {
         console.error("Error updating status:", error);
         res.status(500).json({ error: "Internal server error" });
+    } finally {
+        client.close();
     }
 });
 
@@ -719,6 +688,30 @@ app.get("/api/applicant/status/:jobseekerusername", async (req, res) => {
     }
 });
 
+//Applicant Status
+app.post('/api/application', async (req, res) => {
+    const { jobId, jobseekerUsername, status } = req.body;
+
+    try {
+        const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+        await client.connect();
+        const database = client.db(dbName);
+        const collection = database.collection(collectionName);
+
+        const result = await collection.insertOne({
+            jobId: new ObjectId(jobId),
+            jobseekerUsername,
+            status
+        });
+
+        client.close();
+
+        res.status(201).json({ success: true, message: 'Application stored successfully' });
+    } catch (error) {
+        console.error('Error storing application:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
 
 app.listen(3000 , () => {
     console.log('Server is running on port http://localhost:3000');

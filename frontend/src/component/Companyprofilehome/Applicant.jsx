@@ -4,11 +4,11 @@ import axios from "axios";
 
 function Applicant() {
   const [applicants, setApplicants] = useState([]);
-  const { companyusername, jobseekerusername } = useParams();
+  const { companyusername } = useParams();
 
   useEffect(() => {
     fetchApplicants();
-  }, []);
+  }, [companyusername]);
 
   const fetchApplicants = async () => {
     try {
@@ -18,33 +18,33 @@ function Applicant() {
       console.error("Error fetching applicants:", error);
     }
   };
-
-  const handleAction = async (applicantId, actionCommand) => {
+  const handleAction = async (applicantId, ActionCommand , jobseekerusername) => {
     try {
-      console.log("Applicant ID:", applicantId);
+      console.log(jobseekerusername)
+      console.log(applicantId)
       const response = await axios.post(`http://localhost:3000/api/applicant/${jobseekerusername}/${applicantId}`, {
-        ActionCommand: actionCommand,
+        ActionCommand : ActionCommand,
       });
       console.log("Response from backend:", response.data);
       fetchApplicants();
     } catch (error) {
-      console.error(`Error ${actionCommand}ing applicant:`, error);
+      console.error(`Error ${ActionCommand}ing applicant:`, error);
     }
   };
 
   const renderApplicants = () => {
     return applicants.map((applicant) => (
       <tr key={applicant._id}>
-        <td className="py-3 text-center align-middle">{applicant.Name}</td>
+        <td className="py-3 text-center align-middle">{applicant.JobseekerName}</td>
         <td className="py-3 text-center align-middle">{applicant.Position}</td>
         <td className="py-3 text-center align-middle">{applicant.Location}</td>
-        <td className="py-3 text-center align-middle">{applicant.EducationLevel}</td>
-        <td className="py-3 text-center align-middle">{applicant.Email}</td>
+        <td className="py-3 text-center align-middle">{applicant.JobseekerEducationLevel}</td>
+        <td className="py-3 text-center align-middle">{applicant.JobseekerEmail}</td>
         <td className="py-3 text-center align-middle">
-          <button onClick={() => handleAction(applicant._id, "Accept")} className="text-green-500 hover:text-green-800 font-semibold mr-4">
+          <button onClick={() => handleAction(applicant.Jobid, "Accept" , applicant.JobseekerUsername)} className="text-green-500 hover:text-green-800 font-semibold mr-4">
             Accept
           </button>
-          <button onClick={() => handleAction(applicant._id, "Deny")} className="text-red-500 hover:text-red-800 font-semibold">
+          <button onClick={() => handleAction(applicant.Jobid, "Denied" , applicant.JobseekerUsername)} className="text-red-500 hover:text-red-800 font-semibold">
             Deny
           </button>
         </td>
