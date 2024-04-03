@@ -82,7 +82,7 @@ const router=createBrowserRouter([
     element:<Applicantpage/>
   },
   {
-    path:"//Mypostpage/:companyusername/Editpost/:jobid",
+    path:"/Mypostpage/:companyusername/Editpost/:jobid",
     element:<Editcompanypage/>
   },
   {
@@ -90,8 +90,8 @@ const router=createBrowserRouter([
     element:<Editcompanyprofilepage/>
   },
   {
-    path:"/Tester",
-    element:<Adminpage/>
+    path:"/ViewProfile/:jobseekerusername/:companyusername",
+    element:<Viewcompanypage/>
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(

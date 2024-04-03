@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 
 function Search() {
@@ -10,6 +10,7 @@ function Search() {
     const [selectedSalary, setSelectedSalary] = useState("");
     const [postedJobs, setPostedJobs] = useState([]);
     const { jobseekerusername , jobid } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchPostedJobs();
@@ -26,15 +27,16 @@ function Search() {
 
     const applyForJob = async (jobid) => {
         try {
-            console.log("Applying for job:", jobid);
-            console.log("Job seeker username:", jobseekerusername);
             await axios.post(`http://localhost:3000/api/AddToApplicant/${jobseekerusername}/${jobid}`);
-            console.log("Job application successful");
             fetchPostedJobs();
         } catch (error) {
             console.error("Error applying for job:", error);
         }
     };
+
+    const ViewCompanyProfile = async (companyusername) =>{
+        navigate(`/ViewProfile/${jobseekerusername}/${companyusername}`)
+    }
 
     const renderPostedJobs = () => {
         return postedJobs.filter((job) => {
@@ -53,6 +55,11 @@ function Search() {
                 <td className="px-4 py-3 text-center align-middle">
                     <button className="rounded-md border border-gray-400 px-3 py-1 hover:bg-gray-700 hover:text-white transition-colors duration-300"
                     onClick={() => applyForJob(job._id)}>Apply
+                    </button>
+                </td>
+                <td className="px-4 py-3 text-center align-middle">
+                    <button className="rounded-md border border-gray-400 px-3 py-1 ml-2 hover:bg-gray-700 hover:text-white transition-colors duration-300"
+                    onClick={() => ViewCompanyProfile(job.companyUsername)}>View
                     </button>
                 </td>
             </tr>
@@ -129,6 +136,7 @@ function Search() {
                             <th className="px-4 py-2">Salary</th>
                             <th className="px-4 py-2">Description</th>
                             <th className="px-4 py-2">Apply</th>
+                            <th className="px-4 py-2">View</th>
                         </tr>
                     </thead>
                     <tbody>
