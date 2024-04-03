@@ -19,6 +19,7 @@ import Mypostpage from './Pagess/Mypostpage'
 import Applicantpage from './Pagess/Applicantpage'
 import Editcompanypage from './Pagess/Editcompanypage'
 import Editcompanyprofilepage from './Pagess/Editcompanyprofilepage'
+import Viewcompanypage from './Pagess/Viewcompanypage'
 const router=createBrowserRouter([
   {
     path:"/",
@@ -87,6 +88,10 @@ const router=createBrowserRouter([
   {
     path:"/Editcompanyprofile/:companyusername",
     element:<Editcompanyprofilepage/>
+  },
+  {
+    path:"/Tester",
+    element:<Viewcompanypage/>
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(
