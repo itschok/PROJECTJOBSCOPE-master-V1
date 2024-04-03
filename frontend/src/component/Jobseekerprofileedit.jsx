@@ -7,7 +7,7 @@ function Jobseekerprofileedit() {
         Name: "",
         Email: "",
         EducationLevel: "",
-        Job: "" ,
+        Age: "" ,
     });
     
     const navigate = useNavigate();
@@ -63,11 +63,11 @@ function Jobseekerprofileedit() {
                         />
                     </div>
                     <div className="py-3">
-                        <h1>Job</h1>
+                        <h1>Age</h1>
                         <input
                             type="text"
-                            id="Job"
-                            value={formData.Job}
+                            id="Age"
+                            value={formData.Age}
                             onChange={handleChange}
                             className="m-3 py-1 px-3 bg-gray-50 border border-gray-200 rounded-3xl">
                         </input>

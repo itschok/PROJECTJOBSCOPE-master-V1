@@ -4,7 +4,7 @@ import { useParams , useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 
 function Search() {
-    const [selectedJobName, setSelectedJobName] = useState("");
+    const [selectedCompanyname, setSelectedCompanyname] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
     const [selectedPosition, setSelectedPosition] = useState("");
     const [selectedSalary, setSelectedSalary] = useState("");
@@ -40,7 +40,7 @@ function Search() {
 
     const renderPostedJobs = () => {
         return postedJobs.filter((job) => {
-            const matchesJobName = selectedJobName === '' || job.JobName.toLowerCase() === selectedJobName.toLowerCase() || selectedJobName === 'All';
+            const matchesJobName = selectedCompanyname === '' || job.JobName.toLowerCase() === selectedCompanyname.toLowerCase() || selectedCompanyname === 'All';
             const matchesLocation = selectedLocation === '' || job.Location.toLowerCase() === selectedLocation.toLowerCase() || selectedLocation === 'All';
             const matchesPosition = selectedPosition === '' || job.Position.toLowerCase() === selectedPosition.toLowerCase() || selectedPosition === 'All';
             const matchesSalary = selectedSalary === '' || parseFloat(job.Salary) === parseFloat(selectedSalary) || selectedSalary === 'All';
@@ -77,11 +77,11 @@ function Search() {
                 <h1>SEARCH FOR</h1>
                 <Form>
                     <Form.Group controlId="jobNameSelect">
-                        <Form.Label>Job Name</Form.Label>
+                        <Form.Label>Company Name</Form.Label>
                         <Form.Control 
                             as="select" 
-                            value={selectedJobName}
-                            onChange={(e) => setSelectedJobName(e.target.value)}
+                            value={selectedCompanyname}
+                            onChange={(e) => setSelectedCompanyname(e.target.value)}
                         >
                             {jobNames.map((name, index) => (
                                 <option key={index} value={name}>{name}</option>
