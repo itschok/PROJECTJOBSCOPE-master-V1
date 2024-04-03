@@ -620,32 +620,33 @@ app.get('/api/myjob/:jobseekerusername', async (req, res) => {
 
 //Accept and Denied
 app.post("/api/applicant/:jobseekerusername/:jobid", async (req, res) => {
-    const { jobseekerusername , jobid } = req.params;
+    const { jobseekerusername, jobid } = req.params;
     const { ActionCommand } = req.body;
     let client
     try {
-        client = new MongoClient(uri, { useNewUrlParser: true });
-        await client.connect();
+        client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+        await client.connect(); // Wait for the connection to be established
+        
         const database = client.db("Job");
         const collection = database.collection("Job");
 
         let filter = {
-            _id : new ObjectId(jobid),
-            JobseekerUsername : jobseekerusername
+            Jobid: new ObjectId(jobid),
+            JobseekerUsername: jobseekerusername
         };
 
         if (ActionCommand === "Accept") {
             await collection.updateOne(
-                filter ,
+                filter,
                 { $set: { "Status": "Accepted" } }
             );
-
+            res.status(200).json({ message: "Status updated successfully" });
         } else if (ActionCommand === "Deny") {
             await collection.updateOne(
-                filter ,
+                filter,
                 { $set: { "Status": "Denied" } }
             );
-
+            res.status(200).json({ message: "Status updated successfully" });
         } else {
             res.status(400).json({ message: "Invalid action command" });
         }
@@ -653,7 +654,7 @@ app.post("/api/applicant/:jobseekerusername/:jobid", async (req, res) => {
         console.error("Error updating status:", error);
         res.status(500).json({ error: "Internal server error" });
     } finally {
-        client.close();
+        client.close(); // Close the client connection
     }
 });
 

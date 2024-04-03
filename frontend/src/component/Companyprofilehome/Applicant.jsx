@@ -44,7 +44,7 @@ function Applicant() {
           <button onClick={() => handleAction(applicant.Jobid, "Accept" , applicant.JobseekerUsername)} className="text-green-500 hover:text-green-800 font-semibold mr-4">
             Accept
           </button>
-          <button onClick={() => handleAction(applicant.Jobid, "Denied" , applicant.JobseekerUsername)} className="text-red-500 hover:text-red-800 font-semibold">
+          <button onClick={() => handleAction(applicant.Jobid, "Deny" , applicant.JobseekerUsername)} className="text-red-500 hover:text-red-800 font-semibold">
             Deny
           </button>
         </td>
