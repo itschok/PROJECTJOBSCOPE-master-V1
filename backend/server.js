@@ -6,7 +6,6 @@ const {MongoClient , ObjectId , GridFSBucket} =require("mongodb");
 const dotenv = require("dotenv");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const fs = require('fs');
 
 dotenv.config();
 const uri =process.env.MONGO_URI ;
@@ -16,40 +15,6 @@ const app = express();
 app.use(cors({ credentials: true , origin: ['http://localhost:5173'] , }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-
-async function savePictureToMongoDB(filePath , fileName){
-    try {
-        const client = new MongoClient(uri, { useNewUrlParser: true });
-        await client.connect();
-        const database = client.db('users');
-        const bucket = new GridFSBucket(database);
-        const stream = fs.createReadStream(filePath);
-
-        const uploadStream = bucket.openUploadStream(fileName);
-        stream.pipe(uploadStream);
-        await new Promise((resolve, reject) => {
-            uploadStream.on('finish', resolve);
-            uploadStream.on('error', reject);
-        });
-    } catch (error) {
-        console.error('Error saving picture file to MongoDB:', error);
-    } finally {
-        await client.close();
-    }
-}
-
-//Picture Upload
-app.post("/upload" , async (req , res ) => {
-    const {fileName , fileData} = req.body;
-
-    try {
-        await savePictureToMongoDB(fileData , fileName);
-        res.json({ success: true, message: "File uploaded successfully" });
-    } catch (error) {
-        console.error("Error uploading file:", error);
-        res.status(500).json({ success: false, message: "File upload failed" });
-    }
-})
 
 //JobSeeker Register
 app.post("/jobseekerregister" , async (req , res) => {
@@ -498,6 +463,104 @@ app.get("/jobseekerusers" , verifyToken , async (req , res) => {
         res.json({
             success : false,
             message : "Get users failed",
+        });
+    } finally {
+        await client.close();
+    }
+});
+
+//Api to Add Jobseeker to Applicant
+app.post('/api/AddToApplicant/:jobseekerusername/:jobid', async (req, res) => {
+    const { jobseekerusername, jobid } = req.params;
+
+    let client;
+
+    try {
+        client = new MongoClient(uri, { useUnifiedTopology: true });
+        await client.connect();
+
+        const takedb = client.db("users");
+        const takecollection = takedb.collection("jobseeker");
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+
+        const jobseeker = await takecollection.findOne({ jobseekerUsername: jobseekerusername });
+        if (!jobseeker) {
+            return res.status(404).json({ message: 'Job seeker not found' });
+        }
+
+        const postedJob = await collection.findOne({ _id: new ObjectId(jobid) });
+        if (!postedJob) {
+            return res.status(404).json({ message: 'Job not found' });
+        }
+
+        // Check if the jobseekerusername already exists in the array
+        if (postedJob.JobseekerUsername && postedJob.JobseekerUsername.includes(jobseeker.jobseekerUsername)) {
+            return res.status(400).json({ message: 'Job seeker already added' });
+        }
+
+        const result = await collection.updateOne(
+            { _id: new ObjectId(jobid) },
+            { $push :  { 
+                JobseekerUsername : jobseeker.jobseekerUsername ,
+            }}
+        );
+
+        if (result.modifiedCount === 1) {
+            res.status(200).json({ message: 'Job seeker added successfully' });
+        } else {
+            res.status(500).json({ message: 'Failed to add job seeker' });
+        }
+    } catch (error) {
+        console.error('Error adding job seeker:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    } finally {
+        client.close();
+    }
+});
+
+//Get Applicant
+app.get("/api/getApplicant/:companyusername", async (req, res) => {
+    const { companyusername } = req.params;
+    const client = new MongoClient(uri, { useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+
+        const jobs = await collection.find({ companyUsername: companyusername }).toArray();
+        if (jobs.length > 0) {
+            const jobseekerUsernames = jobs.map(job => job.JobseekerUsername).flat();
+
+            const usersDB = client.db("users");
+            const jobseekerCollection = usersDB.collection("jobseeker");
+            const jobseekers = await jobseekerCollection.find({ jobseekerUsername: { $in: jobseekerUsernames } }).toArray();
+
+            const data = jobseekers.map(jobseeker => ({
+                Name: jobseeker.Name,
+                Email: jobseeker.Email,
+                EducationLevel: jobseeker.EducationLevel ,
+                Position: jobs.find(job => job.JobseekerUsername.includes(jobseeker.jobseekerUsername)).Position,
+                Location: jobs.find(job => job.JobseekerUsername.includes(jobseeker.jobseekerUsername)).Location
+            }));
+
+            res.json({
+                success: true,
+                message: "Get users successful",
+                data: data,
+            });
+        } else {
+            res.json({
+                success: false,
+                message: "No users found for the provided company username",
+            });
+        }
+    } catch (error) {
+        console.error('Error retrieving job seekers:', error);
+        res.json({
+            success: false,
+            message: "Get users failed",
         });
     } finally {
         await client.close();
