@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const {MongoClient , ObjectId , GridFSBucket} =require("mongodb");
+const {MongoClient , ObjectId } =require("mongodb");
 const dotenv = require("dotenv");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -503,6 +503,7 @@ app.post('/api/AddToApplicant/:jobseekerusername/:jobid', async (req, res) => {
             { _id: new ObjectId(jobid) },
             { $push :  { 
                 JobseekerUsername : jobseeker.jobseekerUsername ,
+                Status : "None",
             }}
         );
 
@@ -583,7 +584,8 @@ app.get("/api/myjob/:jobseekerusername" , async (req , res) => {
             Location: job.Location,
             Position: job.Position,
             Salary: job.Salary,
-            Description: job.Description
+            Description: job.Description,
+            Status : job.Status, 
         }));
 
         res.json({
@@ -601,6 +603,94 @@ app.get("/api/myjob/:jobseekerusername" , async (req , res) => {
         await client.close();
     }
 });
+
+//Accept and Denied
+app.post("/api/applicant/:jobseekerusername/:jobid", async (req, res) => {
+    const jobseekerusername = req.params.jobseekerusername;
+    const jobid = req.params.jobid;
+    const { ActionCommand } = req.body;
+
+    try {
+        const client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+
+        const postedJob = await collection.findOne({ _id: new ObjectId(jobid) });
+
+        if (!postedJob) {
+            return res.status(404).json({ message: "Job not found" });
+        }
+
+        const index = postedJob.JobseekerUsername.findIndex(applicant => applicant === jobseekerusername);
+
+        if (index === -1) {
+            return res.status(404).json({ message: "Job seeker not found in applicants list" });
+        }
+
+        // Ensure Status field exists in each JobseekerUsername element
+        if (!postedJob.Status) {
+            // Initialize an empty array for Status if it doesn't exist
+            postedJob.Status = [];
+        }
+
+        // Ensure the Status array has the same length as JobseekerUsername array
+        while (postedJob.Status.length < postedJob.JobseekerUsername.length) {
+            postedJob.Status.push("None"); // Initialize statuses to "None" for new applicants
+        }
+
+        const updateQuery = {};
+        if (ActionCommand === "Accept") {
+            updateQuery.$set = { ["Status." + index]: "Accepted" };
+        } else if (ActionCommand === "Denied") {
+            updateQuery.$set = { ["Status." + index]: "Denied" };
+        } else {
+            return res.status(400).json({ message: "Invalid action command" });
+        }
+
+        const result = await collection.updateOne(
+            { _id: new ObjectId(jobid) },
+            updateQuery
+        );
+
+        res.json(result);
+    } catch (error) {
+        console.error("Error updating status:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+//Get Applicant Status
+app.get("/api/applicant/status/:jobseekerusername", async (req, res) => {
+    const jobseekerusername = req.params.jobseekerusername;
+
+    try {
+        const client = new MongoClient(uri, { useNewUrlParser: true });
+        await client.connect();
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+
+        const postedJobs = await collection.find({ "JobseekerUsername": jobseekerusername }).toArray();
+
+        if (postedJobs.length === 0) {
+            return res.status(404).json({ message: "No jobs found for the specified job seeker" });
+        }
+
+        const statuses = postedJobs.map(job => {
+            const index = job.JobseekerUsername.findIndex(username => username === jobseekerusername);
+            return {
+                JobId: job._id,
+                Status: job.Status[index] || "None" // Get status if available, otherwise default to "None"
+            };
+        });
+
+        res.json(statuses);
+    } catch (error) {
+        console.error("Error retrieving status:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 
 app.listen(3000 , () => {
     console.log('Server is running on port http://localhost:3000');

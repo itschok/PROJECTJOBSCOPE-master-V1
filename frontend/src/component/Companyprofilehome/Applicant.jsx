@@ -1,21 +1,34 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 function Applicant() {
   const [applicants, setApplicants] = useState([]);
-  const { companyusername } = useParams();
+  const { companyusername, jobseekerusername } = useParams();
 
   useEffect(() => {
-    fetchApplicant();
+    fetchApplicants();
   }, []);
 
-  const fetchApplicant = async () => {
+  const fetchApplicants = async () => {
     try {
       const response = await axios.get(`http://localhost:3000/api/getApplicant/${companyusername}`);
       setApplicants(response.data.data);
     } catch (error) {
-      console.error("Error fetching applicant:", error);
+      console.error("Error fetching applicants:", error);
+    }
+  };
+
+  const handleAction = async (applicantId, actionCommand) => {
+    try {
+      console.log("Applicant ID:", applicantId);
+      const response = await axios.post(`http://localhost:3000/api/applicant/${jobseekerusername}/${applicantId}`, {
+        ActionCommand: actionCommand,
+      });
+      console.log("Response from backend:", response.data);
+      fetchApplicants();
+    } catch (error) {
+      console.error(`Error ${actionCommand}ing applicant:`, error);
     }
   };
 
@@ -28,9 +41,12 @@ function Applicant() {
         <td className="py-3 text-center align-middle">{applicant.EducationLevel}</td>
         <td className="py-3 text-center align-middle">{applicant.Email}</td>
         <td className="py-3 text-center align-middle">
-          <Link to={`/Mypostpage/${companyusername}/Editpost/${applicant._id}`} className="text-blue-500 hover:text-blue-800 font-semibold">
-            Edit
-          </Link>
+          <button onClick={() => handleAction(applicant._id, "Accept")} className="text-green-500 hover:text-green-800 font-semibold mr-4">
+            Accept
+          </button>
+          <button onClick={() => handleAction(applicant._id, "Deny")} className="text-red-500 hover:text-red-800 font-semibold">
+            Deny
+          </button>
         </td>
       </tr>
     ));

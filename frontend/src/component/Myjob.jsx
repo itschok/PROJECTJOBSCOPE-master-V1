@@ -27,9 +27,7 @@ function Myjob(){
                 <td className="py-3 text-center align-middle">{job.Position}</td>
                 <td className="py-3 text-center align-middle">{job.Salary}</td>
                 <td className="py-3 text-center align-middle">{job.Description}</td>
-                <td className="py-3 text-center align-middle">
-                    
-                </td>
+                <td className="py-3 text-center align-middle">{job.Status}</td>
             </tr>
         )); 
     };
