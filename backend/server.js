@@ -567,6 +567,41 @@ app.get("/api/getApplicant/:companyusername", async (req, res) => {
     }
 });
 
+//Get Myjob
+app.get("/api/myjob/:jobseekerusername" , async (req , res) => {
+    const { jobseekerusername } = req.params;
+    const client = new MongoClient(uri , { useUnifiedTopology : true});
+    try {
+        await client.connect();
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+
+        const jobs = await collection.find({ JobseekerUsername: jobseekerusername }).toArray();
+        const formattedJobs = jobs.map(job => ({
+            companyUsername: job.companyUsername,
+            JobName: job.JobName,
+            Location: job.Location,
+            Position: job.Position,
+            Salary: job.Salary,
+            Description: job.Description
+        }));
+
+        res.json({
+            success: true,
+            message: "Get user's jobs successful",
+            data: formattedJobs,
+        });
+    } catch (error) {
+        console.error("Error retrieving user's jobs:", error);
+        res.json({
+            success: false,
+            message: "Get user's jobs failed",
+        });
+    } finally {
+        await client.close();
+    }
+});
+
 app.listen(3000 , () => {
     console.log('Server is running on port http://localhost:3000');
 });
