@@ -9,11 +9,11 @@ function Search() {
     const [selectedPosition, setSelectedPosition] = useState("");
     const [selectedSalary, setSelectedSalary] = useState("");
     const [postedJobs, setPostedJobs] = useState([]);
-    const { companyusername } = useParams();
+    const { jobseekerusername , jobid } = useParams();
 
     useEffect(() => {
         fetchPostedJobs();
-    }, [companyusername]);
+    }, [ jobseekerusername , jobid ]);
 
     const fetchPostedJobs = async () => {
         try {
@@ -21,6 +21,16 @@ function Search() {
             setPostedJobs(response.data.data);
         } catch (error) {
             console.error("Error fetching posted jobs:", error);
+        }
+    };
+
+    const applyForJob = async (jobid) => {
+        try {
+            const response = await axios.post(`http://localhost:3000/api/AddToApplicant/${jobseekerusername}/${jobid}`);
+            console.log(response.data.message);
+            fetchPostedJobs();
+        } catch (error) {
+            console.error("Error applying for job:", error);
         }
     };
 
@@ -39,7 +49,8 @@ function Search() {
                 <td className="px-4 py-3 text-center align-middle">{job.Salary}</td>
                 <td className="px-4 py-3 text-center align-middle">{job.Description}</td>
                 <td className="px-4 py-3 text-center align-middle">
-                    <button className="rounded-md border border-gray-400 px-3 py-1 hover:bg-gray-700 hover:text-white transition-colors duration-300">Apply
+                    <button className="rounded-md border border-gray-400 px-3 py-1 hover:bg-gray-700 hover:text-white transition-colors duration-300"
+                    onClick={() => applyForJob(job._id)}>Apply
                     </button>
                 </td>
             </tr>
