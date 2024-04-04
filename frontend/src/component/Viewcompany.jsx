@@ -34,7 +34,7 @@ function Viewcompany() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <h1 className="text-xl font-semibold">Company Name</h1>
+                    <h1 className="text-xl font-semibold">Name</h1>
                     <input
                         type="text"
                         id="CompanyName"
