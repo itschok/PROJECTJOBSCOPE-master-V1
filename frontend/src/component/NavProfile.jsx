@@ -26,7 +26,7 @@ function Navprofile(){
     return(
         <nav className="p-4 bg-oragne-200 ">
         <div className="flex space-x-10 justify-center">
-                <div className="text-3xl font-black text-orange-500 "><Link to="/">JobScope</Link>
+                <div className="text-3xl font-black text-orange-500 "><Link to={`/Jobseekerhome/${jobseekerusername}`}>JobScope</Link>
                 </div>
                 <ul className='hidden md:flex space-x-9 items-end'>
                 <Link to ={`/Jobseekerhome/${jobseekerusername}`} className="text-gray-900  hover:text-orange-500 text-base">HOME</Link>
