@@ -57,6 +57,16 @@ function EditPostjob() {
         }
     };
 
+    const handleDelete = async (event) => {
+        event.preventDefault();
+        try {
+            await axios.get(`http://localhost:3000/api/postjob/companies/${companyusername}/${jobid}`);
+            navigate(`/Mypostpage/${companyusername}`);
+        } catch (error) {
+            console.log("Delete Failed")
+        }
+    };
+
     return (
         <div className="container mx-auto text-center py-5 ">
             <form onSubmit={handleSubmit}>
@@ -122,9 +132,15 @@ function EditPostjob() {
                 </div>
                 <button
                     type="submit"
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full"
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full mr-4"
                 >
                     SAVE
+                </button>
+                <button
+                    onClick={handleDelete}
+                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full"
+                >
+                    Delete
                 </button>
             </form>
         </div>

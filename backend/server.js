@@ -6,7 +6,6 @@ const {MongoClient , ObjectId } =require("mongodb");
 const dotenv = require("dotenv");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const fs = require('fs');
 
 dotenv.config();
 const uri =process.env.MONGO_URI ;
@@ -230,7 +229,7 @@ app.post("/companylogin" , async (req , res) => {
 //CompanyPostJob
 app.post('/api/postjob/:companyusername' , async (req , res) => {
     const { companyusername } = req.params;
-    const { JobName , ActionCommand , JobID , Location , Position , Salary , Description } = req.body;
+    const { JobName , ActionCommand , Location , Position , Salary , Description } = req.body;
     let client;
     try {
         client = new MongoClient(uri , { useNewUrlParser : true});
@@ -251,28 +250,6 @@ app.post('/api/postjob/:companyusername' , async (req , res) => {
                 message: "Post Success" ,
                 JobID : result.insertedId,
             });
-        } else if(ActionCommand === "update") {
-            const filter = { _id : new ObjectId(JobID) };
-            const update = { $set : { JobName , Location , Position , Salary , Description }};
-            const result = await collection.updateOne(filter , update);
-            res.json({
-                success : true ,
-                message : "Update Success" ,
-                ObjectId : JobID,
-            })
-        }else if(ActionCommand === "delete") {
-            const result = await collection.deleteOne({ _id : new ObjectId(JobID) });
-            if (result.deletedCount === 1) {
-                res.json({
-                    success: true,
-                    message: "Delete Success"
-                });
-            } else {
-                res.status(404).json({
-                    success: false,
-                    message: "Job posting not found or not deleted"
-                });
-            }
         } else {
             res.status(400).json({
                 success : false ,
@@ -289,6 +266,32 @@ app.post('/api/postjob/:companyusername' , async (req , res) => {
         client.close();
     }
 });
+
+//Delete Postjob
+app.get(`/api/postjob/companies/:companyusername/:jobid` , async (req , res) => {
+    const { jobid } = req.params;
+    let client
+    try {
+        client = new MongoClient(uri , { useNewUrlParser : true });
+        await client.connect();
+        const database = client.db("postedjob");
+        const collection = database.collection("postedjob");
+
+        result = await collection.deleteOne({ _id : new ObjectId(jobid) })
+        res.json({
+            success : true,
+            message : "Delete Complete"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success : false ,
+            message : "Delete Failed" ,
+            error : error.message ,
+        })
+    } finally {
+        client.close();
+    }
+})
 
 //Edit CompanyProfile
 app.post(`/api/profile/companies/:companyusername/update` , async (req , res) => {
@@ -511,7 +514,7 @@ app.post('/api/profile/jobseeker/:jobseekerusername/update' , verifyToken , asyn
 });
 
 function verifyToken(req , res , next) {
-    const authToken = req.cookies.token
+    const authToken = req.cookies.token;
     if (typeof authToken != "undefined") {
         jwt.verify(authToken , process.env.SECRET , (err , authData) => {
             if(err) {
@@ -726,8 +729,7 @@ app.post("/api/applicant/:jobseekerusername/:jobid", async (req, res) => {
     let client
     try {
         client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-        await client.connect(); // Wait for the connection to be established
-
+        await client.connect();
         const database = client.db("Job");
         const collection = database.collection("Job");
 
@@ -779,7 +781,7 @@ app.get("/api/applicant/status/:jobseekerusername", async (req, res) => {
             const index = job.JobseekerUsername.findIndex(username => username === jobseekerusername);
             return {
                 JobId: job._id,
-                Status: job.Status[index] || "None" // Get status if available, otherwise default to "None"
+                Status: job.Status[index] || "None" 
             };
         });
 
