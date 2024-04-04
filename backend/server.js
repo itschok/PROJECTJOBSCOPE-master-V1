@@ -359,44 +359,6 @@ app.post('/api/editpostjob/:jobid' , async (req , res) => {
     }
 });
 
-//Edit postjob
-app.post('/api/editpostjob/:jobid' , async (req , res) => {
-    const { jobid } = req.params;
-    const { JobName , Location , Position , Salary , Description } = req.body;
-    let client;
-    try {
-        client = new MongoClient(uri , { useNewUrlParser : true});
-        await client.connect();
-        const database = client.db("postedjob");
-        const collection = database.collection("postedjob");
-
-        const updatedJob = {
-            $set: {
-                JobName: JobName,
-                Location: Location,
-                Position: Position,
-                Salary: Salary,
-                Description: Description
-            }
-        };
-
-        const result = await collection.updateOne({ _id: new ObjectId(jobid) }, updatedJob);
-        
-        if (result.matchedCount === 1) {
-            res.status(200).json({ message: 'Job updated successfully.' });
-        } else {
-            res.status(404).json({ message: 'Job not found.' });
-        }
-    } catch (error) {
-        console.error("Error editing job:", error);
-        res.status(500).json({ message: 'Internal server error.' });
-    } finally {
-        if (client) {
-            client.close();
-        }
-    }
-});
-
 //Get JobSeekerUsername
 app.get('/api/profile/jobseeker/:jobseekerusername', async (req, res) => {
     const { jobseekerusername } = req.params;
@@ -498,7 +460,7 @@ app.post('/api/profile/jobseeker/:jobseekerusername/update' , verifyToken , asyn
         const collection = database.collection("jobseeker");
 
         const filter = { jobseekerUsername : jobseekerusername };
-        const update = { $set: { Name, Email, EducationLevel, Job } };
+        const update = { $set: { Name, Email, EducationLevel, Age } };
 
         const result = await collection.updateOne(filter, update);
 
