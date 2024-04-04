@@ -20,12 +20,9 @@ function Applicant() {
   };
   const handleAction = async (applicantId, ActionCommand , jobseekerusername) => {
     try {
-      console.log(jobseekerusername)
-      console.log(applicantId)
-      const response = await axios.post(`http://localhost:3000/api/applicant/${jobseekerusername}/${applicantId}`, {
+      await axios.post(`http://localhost:3000/api/applicant/${jobseekerusername}/${applicantId}`, {
         ActionCommand : ActionCommand,
       });
-      console.log("Response from backend:", response.data);
       fetchApplicants();
     } catch (error) {
       console.error(`Error ${ActionCommand}ing applicant:`, error);
