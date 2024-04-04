@@ -30,7 +30,6 @@ function Nav(){
                 <Link to ="/Register" className="text-gray-900  hover:text-orange-500 text-base">REGISTER</Link>
                 <Link to = "/Login" className="text-gray-900  hover:text-orange-500 text-base">LOGIN</Link>
                 <Link to ="/Company" className="text-gray-900 hover:text-orange-500 text-base">FOR COMPANY</Link>
-                <Link to ="/Jobseekerhome" className="text-gray-900 hover:text-orange-500 text-base">TESTPROFILEJOBSEEKER</Link>
             </ul>
         </div>
         {/** Mobile Menu */}

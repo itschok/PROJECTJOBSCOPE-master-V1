@@ -5,17 +5,17 @@ function InfoOne() {
   const images = [
     {
       url: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name:"BIGC",
+      name:"BIG C",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae itaque reprehenderit harum ipsa optio eligendi, cumque culpa esse consequatur commodi, excepturi fugiat dolorum veritatis ab perspiciatis velit aspernatur voluptas obcaecati."
     },
     {
       url: "https://images.unsplash.com/photo-1683009427666-340595e57e43?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name:"BIGO",
+      name:"BIG E",
       description: "Fusce id justo in lectus tincidunt eleifend. Nam ut arcu ut lacus consequat feugiat sed ac nisi."
     },
     {
       url: "https://images.unsplash.com/photo-1683009427042-e094996f9780?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name:"BICQ",
+      name:"BIC Q",
       description: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas."
     }
     // Add more image URLs as needed

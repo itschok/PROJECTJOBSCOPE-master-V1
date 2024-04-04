@@ -30,7 +30,6 @@ function Navcompany(){
                 <Link to ="/CompanyRegister" className="text-gray-900  hover:text-blue-500 text-base">REGISTER</Link>
                 <Link to = "/CompanyLogin" className="text-gray-900  hover:text-blue-500 text-base">LOGIN</Link>
                 <Link to="/" className="text-gray-900 hover:text-blue-500 text-base">FOR JOBSEEKER</Link>
-                <Link to="/Companyhome"className="text-gray-900 hover:text-blue-500 text-base">TESTPROFILECOMPANY</Link>
             </ul>
         </div>
         {/** Mobile Menu */}
