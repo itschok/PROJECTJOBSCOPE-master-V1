@@ -19,7 +19,7 @@ import Mypostpage from './Pagess/Mypostpage'
 import Applicantpage from './Pagess/Applicantpage'
 import Editcompanypage from './Pagess/Editcompanypage'
 import Editcompanyprofilepage from './Pagess/Editcompanyprofilepage'
-import Viewcompanypage from './component/Viewcompany'
+import Viewcompanypage from './Pagess/Viewcompanypage'
 import Adminpage from './Pagess/Adminpage'
 const router=createBrowserRouter([
   {
@@ -98,6 +98,7 @@ const router=createBrowserRouter([
     path:"/onlyAdmin",
     element:<Adminpage/>
   }
+
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
